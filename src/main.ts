@@ -1,10 +1,10 @@
-import { log } from "./utils/log.ts";
+import { log } from "@/utils/log.ts";
 
-import { MessageType } from "./types/messageTypes.ts";
-import dialRequest from "./handlers/dialRequest.ts";
-import { pb } from "./utils/pocketbase.ts";
+import { MessageType } from "@/types/messageTypes.ts";
+import dialRequest from "@/handlers/dialRequest.ts";
+import { pb } from "@/utils/pocketbase.ts";
 import { green, red } from "colors";
-import requestAddress from "./handlers/requestAddress.ts";
+import requestAddress from "@/handlers/requestAddress.ts";
 
 if (!Deno.env.get("PB_ENDPOINT")) {
   log.fatal("Please include PB_ENDPOINT as an environment variable");

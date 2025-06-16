@@ -1,4 +1,4 @@
-import { DialRequest } from "../types/messageTypes.ts";
+import { DialRequest } from "@/types/messageTypes.ts";
 
 export default async function dialRequest(
   { data, socket }: { data: DialRequest; socket: WebSocket },

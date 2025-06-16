@@ -1,6 +1,6 @@
-import { RequestAddress } from "../types/messageTypes.ts";
-import { log } from "../utils/log.ts";
-import { pb } from "../utils/pocketbase.ts";
+import { RequestAddress } from "@/types/messageTypes.ts";
+import { log } from "@/utils/log.ts";
+import { pb } from "@/utils/pocketbase.ts";
 
 export default async function requestAddress(
   { data, socket, remote }: {
