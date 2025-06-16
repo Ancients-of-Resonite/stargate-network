@@ -3,7 +3,7 @@ import { log } from "./utils/log.ts";
 import { MessageType } from "./types/messageTypes.ts";
 import dialRequest from "./handlers/dialRequest.ts";
 import { pb } from "./utils/pocketbase.ts";
-import { green } from "colors";
+import { green, red } from "colors";
 import requestAddress from "./handlers/requestAddress.ts";
 
 if (!Deno.env.get("PB_ENDPOINT")) {
@@ -64,10 +64,10 @@ Deno.serve((req, info) => {
     }
   });
 
-  socket.addEventListener("close", (ev) => {
+  socket.addEventListener("close", (_ev) => {
     log.info(
       `Client ${
-        green(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
+        red(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
       } has disconnected from the network.`,
     );
   });
