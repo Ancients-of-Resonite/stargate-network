@@ -8,4 +8,5 @@ interface TPB extends PocketBase {
   collection(idOrName: "users"): RecordService<User>;
 }
 
-export const pb = new PocketBase() as TPB;
+export const pb = new PocketBase(Deno.env.get("PB_ENDPOINT")!) as TPB;
+pb.autoCancellation(false);
