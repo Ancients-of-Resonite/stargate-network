@@ -4,6 +4,7 @@ import { MessageType } from "./types/messageTypes.ts";
 import dialRequest from "./handlers/dialRequest.ts";
 import { pb } from "./utils/pocketbase.ts";
 import { green } from "colors";
+import requestAddress from "./handlers/requestAddress.ts";
 
 if (!Deno.env.get("PB_ENDPOINT")) {
   log.fatal("Please include PB_ENDPOINT as an environment variable");
@@ -41,6 +42,14 @@ Deno.serve((req, info) => {
     const data = JSON.parse(event.data);
 
     switch (data.type) {
+      case MessageType.RequestAddress:
+        log.info(
+          `Client ${
+            green(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
+          } has requested address ${data.gate_address}${data.gate_code}`,
+        );
+        requestAddress({ data, socket, remote: info.remoteAddr });
+        break;
       case MessageType.DialRequest:
         log.info(
           `Client ${
