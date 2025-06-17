@@ -1,4 +1,5 @@
 export interface Session {
+  id: string;
   gate_address: string;
   gate_code: string;
   gate_status: string;
