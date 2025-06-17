@@ -30,6 +30,7 @@ Deno.serve((req, info) => {
   if (req.headers.get("upgrade") != "websocket") {
     return new Response(null, { status: 501 });
   }
+  const remote = `${info.remoteAddr.hostname}:${info.remoteAddr.port}`;
 
   const { socket, response } = Deno.upgradeWebSocket(req);
 
@@ -43,21 +44,23 @@ Deno.serve((req, info) => {
     if (event.data.startsWith("IDC")) return;
 
     const data = JSON.parse(event.data);
-
+    const ses_data = {
+      data,
+      socket,
+      remote,
+    };
     switch (data.type) {
       case MessageType.RequestAddress:
         log.info(
           `Client ${
-            green(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
+            green(remote)
           } has requested address ${data.gate_address}${data.gate_code}`,
         );
-        requestAddress({ data, socket, remote: info.remoteAddr });
+        requestAddress(ses_data);
         break;
       case MessageType.DialRequest:
         log.info(
-          `Client ${
-            green(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
-          } has requested to dial.`,
+          `Client ${green(remote)} has requested to dial.`,
         );
         dialRequest({ data, socket });
         break;
