@@ -11,11 +11,16 @@ export default async function requestAddress(
     remote: string;
   },
 ) {
-  const eg = await pb.collection("stargates").getFullList(1, {
-    filter: `gate_address="${data.gate_address}"`,
-  });
+  let eg;
+  try {
+    eg = await pb.collection("stargates").getFirstListItem(
+      `gate_address = "${data.gate_address}"`,
+    );
+  } catch {
+    eg = null;
+  }
 
-  if (eg.length == 0) {
+  if (!eg) {
     log.info(
       `Accepted request for address ${data.gate_address}${data.gate_code}`,
     );
