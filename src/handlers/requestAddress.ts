@@ -35,7 +35,7 @@ export default async function requestAddress(
     });
 
     const unsub = await pb.collection("stargates").subscribe(gate.id, (e) => {
-      console.log("temp\n" + e);
+      console.log("temp\n" + JSON.stringify(e));
     });
 
     socket.addEventListener("close", async () => {
