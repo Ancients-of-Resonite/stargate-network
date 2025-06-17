@@ -32,7 +32,7 @@ export class Sessions {
   }
 
   public removeSession(remote: string) {
-    let oldses = this.sessions.filter((v) => v.remote != remote);
+    const oldses = this.sessions.filter((v) => v.remote != remote);
 
     this.sessions = oldses;
   }
