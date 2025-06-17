@@ -62,7 +62,7 @@ Deno.serve((req, info) => {
         log.info(
           `Client ${green(remote)} has requested to dial.`,
         );
-        dialRequest({ data, socket });
+        dialRequest(ses_data);
         break;
       default:
         socket.send("this type is not a thing");
