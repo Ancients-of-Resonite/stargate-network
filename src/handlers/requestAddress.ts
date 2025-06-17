@@ -2,13 +2,13 @@ import { cyan } from "colors";
 import { RequestAddress } from "@/types/messageTypes.ts";
 import { log } from "@/utils/log.ts";
 import { pb } from "@/utils/pocketbase.ts";
-import { sessions } from "../main.ts";
+import { sessions } from "@/main.ts";
 
 export default async function requestAddress(
   { data, socket, remote }: {
     data: RequestAddress;
     socket: WebSocket;
-    remote: Deno.NetAddr;
+    remote: string;
   },
 ) {
   const eg = await pb.collection("stargates").getFullList(1, {
@@ -39,13 +39,21 @@ export default async function requestAddress(
     });
 
     socket.addEventListener("close", async () => {
-      await unsub();
+      const gate = sessions.getSession(remote);
+
+      if (gate) {
+        await unsub();
+        await pb.collection("stargates").delete(gate.id);
+        sessions.removeSession(`${remote}`);
+      }
+      return;
     });
 
     sessions.pushSession({
+      id: gate.id,
       gate_address: data.gate_address,
       gate_code: data.gate_code,
-      remote: `${remote.hostname}:${remote.port}`,
+      remote: `${remote}`,
       gate_status: "IDLE",
       connected_gate: {
         connected: false,
@@ -56,11 +64,9 @@ export default async function requestAddress(
   } else {
     log.info(
       `Denied request for address ${data.gate_address}${data.gate_code} for client ${
-        cyan(remote.hostname + ":" + remote.port)
+        cyan(remote)
       }. Address already taken`,
     );
     socket.send("403");
-
-    sessions.removeSession(`${remote.hostname}:${remote.port}`);
   }
 }
