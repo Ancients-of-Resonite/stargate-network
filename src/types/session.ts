@@ -25,4 +25,14 @@ export class Sessions {
   public pushSession(session: Session) {
     this.sessions.push(session);
   }
+
+  public getSessions() {
+    return this.sessions;
+  }
+
+  public removeSession(remote: string) {
+    let oldses = this.sessions.filter((v) => v.remote != remote);
+
+    this.sessions = oldses;
+  }
 }
