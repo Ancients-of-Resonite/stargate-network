@@ -5,6 +5,7 @@ import dialRequest from "@/handlers/dialRequest.ts";
 import { pb } from "@/utils/pocketbase.ts";
 import { green, red } from "colors";
 import requestAddress from "@/handlers/requestAddress.ts";
+import { Sessions } from "./types/session.ts";
 
 if (!Deno.env.get("PB_ENDPOINT")) {
   log.fatal("Please include PB_ENDPOINT as an environment variable");
@@ -22,6 +23,8 @@ pb.admins.authWithPassword(
   Deno.env.get("PB_EMAIL")!,
   Deno.env.get("PB_PASSWORD")!,
 );
+
+export const sessions = new Sessions();
 
 Deno.serve((req, info) => {
   if (req.headers.get("upgrade") != "websocket") {
