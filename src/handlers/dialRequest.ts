@@ -14,6 +14,11 @@ export default async function dialRequest(
   const session = sessions.getSession(remote);
 
   if (session) {
+    if (data.gate_address.length < 6) {
+      socket.send("CSDialCheck:400");
+      return;
+    }
+
     if (address == session.gate_address) {
       socket.send("CSDialCheck:403");
       return;
@@ -23,6 +28,11 @@ export default async function dialRequest(
       const gate = await pb.collection("stargates").getFirstListItem(
         `gate_address = "${address}"`,
       );
+
+      if (gate.gate_code != session.gate_code) {
+        socket.send("CSDialCheck:302");
+        return;
+      }
     } catch {
       socket.send("CSDialCheck:404");
     }
