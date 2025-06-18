@@ -1,3 +1,5 @@
+import { Stargate } from "./stargate.ts";
+
 export interface Session {
   id: string;
   gate_address: string;
@@ -35,5 +37,13 @@ export class Sessions {
     const oldses = this.sessions.filter((v) => v.remote != remote);
 
     this.sessions = oldses;
+  }
+
+  public updateSession(remote: string, gate?: Stargate) {
+    let index = this.sessions.findIndex((v) => v.remote == remote);
+
+    this.sessions[index].connected_gate = {
+      connected: gate != undefined,
+    };
   }
 }
