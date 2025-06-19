@@ -8,7 +8,8 @@ export interface Session {
   // Format: "<ip>:<port>"
   remote: string;
   connected_gate: {
-    connected: boolean;
+    state: "OUTGOING" | "INCOMING" | "IDLE";
+    gate_id?: string;
     gate_address?: string;
     gate_code?: string;
   };
@@ -39,11 +40,19 @@ export class Sessions {
     this.sessions = oldses;
   }
 
-  public updateSession(remote: string, gate?: Stargate) {
-    let index = this.sessions.findIndex((v) => v.remote == remote);
+  public updateSession(
+    remote: string,
+    gate?: Stargate,
+    connectionState?: "OUTGOING" | "INCOMING" | "IDLE",
+  ) {
+    const index = this.sessions.findIndex((v) => v.remote == remote);
+    const session = this.sessions[index];
 
     this.sessions[index].connected_gate = {
-      connected: gate != undefined,
+      state: connectionState ?? this.sessions[index].connected_gate.state,
+      gate_id: gate?.id ?? session.connected_gate.gate_id,
+      gate_address: gate?.gate_address ?? session.connected_gate.gate_address,
+      gate_code: gate?.gate_code ?? session.connected_gate.gate_code,
     };
   }
 }
