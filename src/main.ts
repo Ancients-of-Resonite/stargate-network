@@ -3,9 +3,12 @@ import { log } from "@/utils/log.ts";
 import { MessageType } from "@/types/messageTypes.ts";
 import dialRequest from "@/handlers/dialRequest.ts";
 import { pb } from "@/utils/pocketbase.ts";
-import { green, red } from "colors";
+import { cyan, green, magenta, red } from "colors";
 import requestAddress from "@/handlers/requestAddress.ts";
 import { Sessions } from "./types/session.ts";
+import validateRequest from "./handlers/validateAddress.ts";
+import closeWormhole from "./handlers/closeWormhole.ts";
+import updateData from "./handlers/updateData.ts";
 
 if (!Deno.env.get("PB_ENDPOINT")) {
   log.fatal("Please include PB_ENDPOINT as an environment variable");
@@ -63,6 +66,22 @@ Deno.serve((req, info) => {
           `Client ${green(remote)} has requested to dial.`,
         );
         dialRequest(ses_data);
+        break;
+      case MessageType.ValidateAddress:
+        log.info(
+          `Client ${remote} has requested to validate address ${
+            cyan(data.gate_address)
+          }${magenta(data.gate_code)}`,
+        );
+        validateRequest(ses_data);
+        break;
+      case MessageType.CloseWormhole:
+        closeWormhole(socket, remote);
+        break;
+      case MessageType.UpdateData:
+        updateData(data, remote);
+        break;
+      case MessageType.KeepAlive:
         break;
       default:
         socket.send("this type is not a thing");
