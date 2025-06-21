@@ -81,6 +81,8 @@ Deno.serve((req, info) => {
       case MessageType.UpdateData:
         updateData(data, remote);
         break;
+      case MessageType.UpdateIris:
+        break;
       case MessageType.KeepAlive:
         break;
       default:
