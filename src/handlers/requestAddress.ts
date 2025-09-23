@@ -61,7 +61,7 @@ export default async function requestAddress(
       remote: `${remote}`,
       gate_status: "IDLE",
       connected_gate: {
-        connected: false,
+        state: "IDLE",
       },
     });
 
