@@ -4,5 +4,6 @@ in
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     deno
+    lazysql
   ];
 }
