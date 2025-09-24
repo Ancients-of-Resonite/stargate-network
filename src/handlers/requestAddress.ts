@@ -23,7 +23,7 @@ export default async function requestAddress(
     );
 
     try {
-      const _res = await db.insert(stargateSchema).values({
+      await db.insert(stargateSchema).values({
         gate_address: data.gate_address,
         gate_code: data.gate_code,
         max_users: data.max_users,
