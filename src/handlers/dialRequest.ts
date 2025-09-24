@@ -36,6 +36,12 @@ export default async function dialRequest(
         where: eq(stargateSchema.gate_address, address),
       });
 
+      if (!gate) {
+        log.info(`Dialout failed, gate not found`)
+        socket.send("CSDialCheck:404")
+        return;
+      }
+
       if (data.gate_address.length > 6) {
         if (gate.gate_code.startsWith(code)) {
           socket.send("CSDialCheck:200");
