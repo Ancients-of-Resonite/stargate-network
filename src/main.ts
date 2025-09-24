@@ -10,23 +10,6 @@ import validateRequest from "./handlers/validateAddress.ts";
 import closeWormhole from "./handlers/closeWormhole.ts";
 import updateData from "./handlers/updateData.ts";
 
-if (!Deno.env.get("PB_ENDPOINT")) {
-  log.fatal("Please include PB_ENDPOINT as an environment variable");
-  Deno.exit(20);
-}
-
-if (!Deno.env.get("PB_EMAIL") || !Deno.env.get("PB_PASSWORD")) {
-  log.fatal(
-    "Please include an PB_EMAIL and PB_PASSWORD environment variable for the pocketbase database",
-  );
-  Deno.exit(20);
-}
-
-pb.admins.authWithPassword(
-  Deno.env.get("PB_EMAIL")!,
-  Deno.env.get("PB_PASSWORD")!,
-);
-
 export const sessions = new Sessions();
 
 Deno.serve((req, info) => {
