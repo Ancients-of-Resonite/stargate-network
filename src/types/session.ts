@@ -1,4 +1,4 @@
-import { Stargate } from "./stargate.ts";
+import { stargates as stargateSchema } from "../utils/drizzle/schema.ts";
 
 export interface Session {
   id: string;
@@ -40,14 +40,18 @@ export class Sessions {
     this.sessions = oldses;
   }
 
-  public updateSession(
-    remote: string,
-    gate?: Stargate,
-    connectionState?: "OUTGOING" | "INCOMING" | "IDLE",
-  ) {
+  public updateSession({
+    remote,
+    gate,
+    connectionState
+  }: {
+      remote: string,
+      gate?: typeof stargateSchema.$inferSelect,
+      connectionState?: "OUTGOING" | "INCOMING" | "IDLE"
+    }) {
     const index = this.sessions.findIndex((v) => v.remote == remote);
     const session = this.sessions[index];
-
+    
     this.sessions[index].connected_gate = {
       state: connectionState ?? this.sessions[index].connected_gate.state,
       gate_id: gate?.id ?? session.connected_gate.gate_id,
