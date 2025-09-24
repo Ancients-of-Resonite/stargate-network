@@ -3,6 +3,9 @@ import { pb } from "../utils/pocketbase.ts";
 import { sessions } from "../main.ts";
 import { log } from "../utils/log.ts";
 import { cyan, magenta, red } from "colors";
+import { db } from "../utils/db.ts";
+import { eq } from "drizzle-orm";
+import { stargates as stargateSchema } from "../utils/drizzle/schema.ts";
 
 export default async function dialRequest(
   { data, socket, remote }: {
@@ -29,18 +32,20 @@ export default async function dialRequest(
     }
 
     try {
-      const gate = await pb.collection("stargates").getFirstListItem(
-        `gate_address = "${address}"`,
-      );
+      const gate = await db.query.stargateSchema.findFirst({
+        where: eq(stargateSchema.gate_address, address),
+      });
 
       if (data.gate_address.length > 6) {
         if (gate.gate_code.startsWith(code)) {
           socket.send("CSDialCheck:200");
           socket.send(`CSDialedSessionURL:${gate.session_url}`);
           sessions.updateSession(remote, gate);
-          await pb.collection("stargates").update(gate.id, {
-            gate_status: `INCOMING${data.gate_address.length + 1}`,
-          });
+          await db.update(stargateSchema).set({
+            gate_status: `INCOMING${data.gate_address.length + 1}`
+          }).where(
+            eq(stargateSchema.gate_address, address)
+          )
           log.info(
             `Dialout from ${
               cyan(session.gate_address) + magenta(session.gate_code)
@@ -71,7 +76,11 @@ export default async function dialRequest(
       });
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
-      sessions.updateSession(remote, gate, "OUTGOING");
+      sessions.updateSession({
+        remote: remote,
+        gate: gate,
+        connectionState: "OUTGOING"
+      });
     } catch {
       socket.send("CSDialCheck:404");
       log.info(
