@@ -80,5 +80,4 @@ export default async function dialRequest(
       return;
     }
   }
-  socket.send("dial request received\n" + address + +" " + code);
 }
