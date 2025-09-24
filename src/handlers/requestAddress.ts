@@ -73,6 +73,22 @@ export default async function requestAddress(
     });
 
     socket.send('{code:200,message:"Address accepted"}');
+  } else if (eg.session_url == data.session_id) {
+    log.info(
+      `Gate address exists, but session id is the same on requesting gate. Accepting request for ${data.gate_address}${data.gate_code} (${cyan(remote)})`,
+    );
+    sessions.pushSession({
+      id: eg.id,
+      gate_address: data.gate_address,
+      gate_code: data.gate_code,
+      remote: remote,
+      gate_status: "IDLE",
+      connected_gate: {
+        state: "IDLE",
+      },
+    });
+    socket.send('{code:200,message:"Address accepted"}');
+    return;
   } else {
     log.info(
       `Denied request for address ${data.gate_address}${data.gate_code} for client ${
