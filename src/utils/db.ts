@@ -5,14 +5,14 @@ import { log } from "./log.ts";
 
 const { Pool } = pg;
 
-if (!Deno.env.get("DATABASE_URL")) {
-  log.fatal("Please enter a DATABASE_URL variable");
+if (!Deno.env.get("DB_URL")) {
+  log.fatal("Please enter a DB_URL variable");
   Deno.exit(5);
 }
 
 export const db = drizzle({
   client: new Pool({
-    connectionString: Deno.env.get("DATABASE_URL"),
+    connectionString: Deno.env.get("DB_URL"),
   }),
   schema: {
     stargateSchema,
