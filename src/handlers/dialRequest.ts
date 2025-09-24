@@ -89,11 +89,12 @@ export default async function dialRequest(
         gate: gate,
         connectionState: "OUTGOING"
       });
-    } catch {
+    } catch (err) {
       socket.send("CSDialCheck:404");
-      log.info(
-        "Dialout failed, cannot dial your own address... You get a busy signal",
+      log.error(
+        "Something failed... Check error message \n --- Error Message ---",
       );
+      console.error(err)
       return;
     }
   }
