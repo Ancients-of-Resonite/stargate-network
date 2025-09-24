@@ -19,7 +19,7 @@ export default async function requestAddress(
 
   if (!eg) {
     log.info(
-      `Accepted request for address ${data.gate_address}${data.gate_code}`,
+      `Accepted request for address ${data.gate_address}${data.gate_code} (${cyan(remote)})`,
     );
 
     try {
