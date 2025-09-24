@@ -1,5 +1,4 @@
-import { boolean, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { boolean, integer, pgTable, primaryKey, serial, text, uuid } from "drizzle-orm/pg-core";
 
 export const stargates = pgTable("stargates", {
   id: uuid().primaryKey().unique().defaultRandom().notNull(),
@@ -23,3 +22,20 @@ export const stargates = pgTable("stargates", {
     ],
   }),
 });
+
+export const bannedIds = pgTable("banned_ids", {
+  id: serial().primaryKey().notNull(),
+  user_id: text().notNull(),
+  reason: text().notNull()
+})
+
+export const users = pgTable("users", {
+  id: uuid().defaultRandom().unique(),
+  username: text().notNull(),
+  email: text().notNull(),
+  tags: text({
+    enum: [
+      "admin",
+    ]
+  })
+})
