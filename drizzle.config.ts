@@ -5,12 +5,12 @@ export default defineConfig({
   schema: "./src/utils/drizzle/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    database: "stargate-network",
-    host: "192.168.2.39",
+    database: Deno.env.get("DB_DATABASE"),
+    host: Deno.env.get("DB_HOST"),
     port: 5439,
-    user: "ancientsofresonite",
-    password: "8xCNfPMZv12QJ7",
+    user: Deno.env.get("DB_USER"),
+    password: Deno.env.get("DB_PASS"),
     ssl: false,
-    url: Deno.env.get("DATABASE_URL")!,
+    url: Deno.env.get("DB_URL")!,
   },
 });
