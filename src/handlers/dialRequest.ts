@@ -79,9 +79,11 @@ export default async function dialRequest(
         return;
       }
 
-      await pb.collection("stargates").update(gate.id, {
-        gate_status: "INCOMING7",
-      });
+      db.update(stargateSchema).set({
+        gate_status: `INCOMING${data.gate_address.length + 1}`
+      }).where(
+        eq(stargateSchema.gate_address, address)
+      )
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
       sessions.updateSession({
