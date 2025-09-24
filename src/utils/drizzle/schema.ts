@@ -12,15 +12,7 @@ export const stargates = pgTable("stargates", {
   public_gate: boolean().notNull(),
   is_headless: boolean().notNull(),
   iris_state: boolean().notNull(),
-  gate_status: text({
-    enum: [
-      "IDLE",
-      "INCOMING7",
-      "INCOMING8",
-      "INCOMING9",
-      "OPEN",
-    ],
-  }),
+  gate_status: text(),
 });
 
 export const bannedIds = pgTable("banned_ids", {
