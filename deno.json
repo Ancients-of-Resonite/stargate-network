@@ -4,7 +4,8 @@
     "db:migrate": "deno -A --env --node-modules-dir npm:drizzle-kit migrate",
     "db:pull": "deno -A --env --node-modules-dir npm:drizzle-kit pull",
     "db:push": "deno -A --env --node-modules-dir npm:drizzle-kit push",
-    "db:generate": "deno -A --env --node-modules-dir npm:drizzle-kit generate"
+    "db:generate": "deno -A --env --node-modules-dir npm:drizzle-kit generate",
+    "db:studio": "deno -A --env --node-modules-dir npm:drizzle-kit studio"
   },
   "imports": {
     "@/": "./src/",
