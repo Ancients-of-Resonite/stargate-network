@@ -40,7 +40,9 @@ export default async function dialRequest(
         if (gate.gate_code.startsWith(code)) {
           socket.send("CSDialCheck:200");
           socket.send(`CSDialedSessionURL:${gate.session_url}`);
-          sessions.updateSession(remote, gate);
+          sessions.updateSession({
+            remote: remote,
+            });
           await db.update(stargateSchema).set({
             gate_status: `INCOMING${data.gate_address.length + 1}`
           }).where(
