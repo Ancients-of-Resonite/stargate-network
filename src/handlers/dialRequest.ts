@@ -37,8 +37,8 @@ export default async function dialRequest(
       });
 
       if (!gate) {
-        log.info(`Dialout failed, gate not found`)
-        socket.send("CSDialCheck:404")
+        log.info(`Dialout failed, gate not found`);
+        socket.send("CSDialCheck:404");
         return;
       }
 
@@ -48,12 +48,12 @@ export default async function dialRequest(
           socket.send(`CSDialedSessionURL:${gate.session_url}`);
           sessions.updateSession({
             remote: remote,
-            });
+          });
           await db.update(stargateSchema).set({
-            gate_status: `INCOMING${data.gate_address.length + 1}`
+            gate_status: `INCOMING${data.gate_address.length + 1}`,
           }).where(
-            eq(stargateSchema.gate_address, address)
-          )
+            eq(stargateSchema.gate_address, address),
+          );
           log.info(
             `Dialout from ${
               cyan(session.gate_address) + magenta(session.gate_code)
@@ -89,7 +89,7 @@ export default async function dialRequest(
       sessions.updateSession({
         remote: remote,
         gate: gate,
-        connectionState: "OUTGOING"
+        connectionState: "OUTGOING",
       });
     } catch (err) {
       socket.send("CSDialCheck:404");
