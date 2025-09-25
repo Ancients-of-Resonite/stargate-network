@@ -3,6 +3,10 @@ import { pb } from "../utils/pocketbase.ts";
 import { sessions } from "../main.ts";
 import { log } from "../utils/log.ts";
 import { cyan, magenta, red } from "colors";
+import { db } from "../utils/db.ts";
+import { eq } from "drizzle-orm";
+import { stargates } from "../utils/drizzle/schema.ts";
+import { SingleStoreColumnBuilderWithAutoIncrement } from "drizzle-orm/singlestore-core/columns";
 
 export default async function validateRequest(
   { data, socket, remote }: {
@@ -29,9 +33,14 @@ export default async function validateRequest(
     }
 
     try {
-      const gate = await pb.collection("stargates").getFirstListItem(
-        `gate_address = "${address}"`,
-      );
+      const gate = await db.query.stargateSchema.findFirst({
+        where: eq(stargates.gate_address, address)
+      })
+
+      if (!gate) {
+        console.log(`Dialout from ${session.gate_address}${session.gate_code} (${cyan(remote)}) failed, no gate found.`)
+        return
+      }
 
       if (data.gate_address.length > 6) {
         if (gate.gate_code.startsWith(code)) {
@@ -67,7 +76,7 @@ export default async function validateRequest(
     } catch {
       socket.send("CSValidCheck:404");
       log.info(
-        `Validation failed code ${"404"}`,
+        `Validation failed code ${red("404")} gate not found`,
       );
       return;
     }
