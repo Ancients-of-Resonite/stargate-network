@@ -8,15 +8,15 @@ import { pb } from "../utils/pocketbase.ts";
 
 export default async function closeWormhole(socket: WebSocket, remote: string) {
   const session = sessions.getSession(remote);
-  if (session?.connected_gate.state != "OUTGOING") return;
+  if (!session?.connected_gate.session) return;
   log.info(
     `Client ${remote} has requested to close connection from ${
       session.gate_address + session.gate_code
-    } to ${session.connected_gate.gate_address} ${session.connected_gate.gate_code}`,
+    } to ${session.connected_gate.session?.gate_address} ${session.connected_gate.session?.gate_code}`,
   );
 
   const outgoing_gate = await db.query.stargateSchema.findFirst({
-    where: eq(stargates.id, session.connected_gate.gate_id!),
+    where: eq(stargates.id, session.connected_gate.session!.id),
   });
 
   const this_gate = await db.query.stargateSchema.findFirst({
@@ -24,7 +24,7 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
   });
 
   if (!outgoing_gate) {
-    log.error(`Gate ${session.connected_gate.gate_address} was not found`);
+    log.error(`Gate ${session.connected_gate.session?.gate_address} was not found`);
     return;
   }
 
@@ -33,19 +33,21 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
     return;
   }
 
-  await db.update(stargates).set({
-    id: outgoing_gate.id,
-    gate_status: "IDLE",
-  }).where(
-    eq(stargates.id, outgoing_gate.id!),
-  );
+  sessions.closeGate(session)
 
-  await db.update(stargates).set({
-    id: this_gate.id,
-    gate_status: "IDLE",
-  }).where(
-    eq(stargates.id, this_gate.id),
-  );
+  // await db.update(stargates).set({
+  //   id: outgoing_gate.id,
+  //   gate_status: "IDLE",
+  // }).where(
+  //   eq(stargates.id, outgoing_gate.id!),
+  // );
+
+  // await db.update(stargates).set({
+  //   id: this_gate.id,
+  //   gate_status: "IDLE",
+  // }).where(
+  //   eq(stargates.id, this_gate.id),
+  // );
 
   socket.send("200");
 }

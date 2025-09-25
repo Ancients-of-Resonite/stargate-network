@@ -79,24 +79,21 @@ export default async function dialRequest(
         return;
       }
 
-      db.update(stargateSchema).set({
-        gate_status: `INCOMING${data.gate_address.length + 1}`
-      }).where(
-        eq(stargateSchema.gate_address, address)
-      )
+      // db.update(stargateSchema).set({
+      //   gate_status: `INCOMING${data.gate_address.length + 1}`,
+      // }).where(
+      //   eq(stargateSchema.gate_address, address),
+      // );
+
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
-      sessions.updateSession({
-        remote: remote,
-        gate: gate,
-        connectionState: "OUTGOING",
-      });
+      sessions.dialSession(session, address)
     } catch (err) {
       socket.send("CSDialCheck:404");
       log.error(
         "Something failed... Check error message \n --- Error Message ---",
       );
-      console.error(err)
+      console.error(err);
       return;
     }
   }

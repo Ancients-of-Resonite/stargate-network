@@ -7,7 +7,8 @@ export interface Session {
   gate_status: string;
   // Format: "<ip>:<port>"
   remote: string;
-  incoming_call: () => void;
+  incoming_call: (length: number) => void;
+  close_gate: () => void;
   connected_gate: {
     session?: Session;
   };
@@ -47,7 +48,8 @@ export class Sessions {
     this.sessions = oldses;
   }
 
-  public dialSession(origin: Session, address: "string", length: number) {
+  public dialSession(origin: Session, dialed_address: string) {
+    const address = dialed_address.slice(0, 6);
     const destinationIndex = this.sessions.findIndex((v) =>
       v.gate_address == address
     );
@@ -61,7 +63,15 @@ export class Sessions {
       },
     });
 
-    this.sessions[destinationIndex].incoming_call();
+    this.sessions[destinationIndex].incoming_call(dialed_address.length);
+  }
+
+  public closeGate(origin: Session) {
+    const session_index = this.sessions.findIndex((v) => v.id == origin.id);
+
+    this.sessions[session_index].connected_gate.session?.close_gate();
+
+    this.sessions[session_index].connected_gate.session = undefined;
   }
 
   public updateSession({

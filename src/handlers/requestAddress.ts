@@ -67,9 +67,13 @@ export default async function requestAddress(
       gate_code: data.gate_code,
       remote: remote,
       gate_status: "IDLE",
-      connected_gate: {
-        state: "IDLE",
+      connected_gate: {},
+      incoming_call: (length) => {
+        socket.send(`Impulse:OpenIncoming:${length}`)
       },
+      close_gate: () => {
+        socket.send(`Impulse:CloseWormhole`)
+      }
     });
 
     socket.send('{code:200,message:"Address accepted"}');
@@ -83,9 +87,13 @@ export default async function requestAddress(
       gate_code: data.gate_code,
       remote: remote,
       gate_status: "IDLE",
-      connected_gate: {
-        state: "IDLE",
+      connected_gate: {},
+      incoming_call: (length) => {
+        socket.send(`Impulse:OpenIncoming:${length}`)
       },
+      close_gate: () => {
+        socket.send(`Impulse:CloseWormhole`)
+      }
     });
     socket.send('{code:200,message:"Address accepted"}');
     return;
