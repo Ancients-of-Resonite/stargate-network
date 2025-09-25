@@ -7,14 +7,21 @@ export interface Session {
   gate_status: string;
   // Format: "<ip>:<port>"
   remote: string;
+  incoming_call: () => void;
   connected_gate: {
-    state: "OUTGOING" | "INCOMING" | "IDLE";
-    gate_id?: string;
-    gate_address?: string;
-    gate_code?: string;
+    session?: Session;
   };
 }
 
+export interface updateSession {
+  id?: string;
+  gate_address?: string;
+  gate_code?: string;
+  gate_status?: string;
+  connected_gate: {
+    session?: Session;
+  };
+}
 export class Sessions {
   private sessions: Session[];
 
@@ -40,23 +47,40 @@ export class Sessions {
     this.sessions = oldses;
   }
 
+  public dialSession(origin: Session, address: "string", length: number) {
+    const destinationIndex = this.sessions.findIndex((v) =>
+      v.gate_address == address
+    );
+
+    this.updateSession({
+      remote: origin.remote,
+      data: {
+        connected_gate: {
+          session: this.sessions[destinationIndex],
+        },
+      },
+    });
+
+    this.sessions[destinationIndex].incoming_call();
+  }
+
   public updateSession({
     remote,
-    gate,
-    connectionState
+    data,
   }: {
-      remote: string,
-      gate?: typeof stargateSchema.$inferSelect,
-      connectionState?: "OUTGOING" | "INCOMING" | "IDLE"
-    }) {
+    remote: string;
+    data?: updateSession;
+  }) {
     const index = this.sessions.findIndex((v) => v.remote == remote);
     const session = this.sessions[index];
-    
+
     this.sessions[index].connected_gate = {
-      state: connectionState ?? this.sessions[index].connected_gate.state,
-      gate_id: gate?.id ?? session.connected_gate.gate_id,
-      gate_address: gate?.gate_address ?? session.connected_gate.gate_address,
-      gate_code: gate?.gate_code ?? session.connected_gate.gate_code,
+      session: data?.connected_gate.session ?? session.connected_gate.session,
     };
+    this.sessions[index].id = data?.id ?? session.id;
+    this.sessions[index].gate_address = data?.gate_address ??
+      session.gate_address;
+    this.sessions[index].gate_code = data?.gate_code ?? session.gate_code;
+    this.sessions[index].gate_status = data?.gate_status ?? session.gate_status;
   }
 }
