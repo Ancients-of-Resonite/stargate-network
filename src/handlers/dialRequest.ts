@@ -18,7 +18,7 @@ export default async function dialRequest(
   const code = data.gate_address.slice(6, 8);
   const session = sessions.getSession(remote);
 
-  if (session?.connected_gate.state != "IDLE") return;
+  if (session?.connected_gate.session) return;
 
   if (session) {
     if (data.gate_address.length < 6) {
