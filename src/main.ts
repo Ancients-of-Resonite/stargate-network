@@ -12,7 +12,9 @@ import updateData from "./handlers/updateData.ts";
 
 export const sessions = new Sessions();
 
-Deno.serve((req, info) => {
+Deno.serve({
+  port: Deno.env.get("WS_PORT") as unknown as number ?? 8000
+},(req, info) => {
   if (req.headers.get("upgrade") != "websocket") {
     return new Response(null, { status: 501 });
   }

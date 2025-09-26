@@ -7,8 +7,7 @@ export interface Session {
   gate_status: string;
   // Format: "<ip>:<port>"
   remote: string;
-  incoming_call: (length: number) => void;
-  close_gate: () => void;
+  send_impulse: (tag: string) => void;
   connected_gate: {
     session?: Session;
   };
@@ -63,13 +62,13 @@ export class Sessions {
       },
     });
 
-    this.sessions[destinationIndex].incoming_call(dialed_address.length);
+    this.sessions[destinationIndex].send_impulse(`OpenIncoming:${dialed_address.length}`);
   }
 
   public closeGate(origin: Session) {
     const session_index = this.sessions.findIndex((v) => v.id == origin.id);
 
-    this.sessions[session_index].connected_gate.session?.close_gate();
+    this.sessions[session_index].connected_gate.session?.send_impulse("CloseWormhole");
 
     this.sessions[session_index].connected_gate.session = undefined;
   }
