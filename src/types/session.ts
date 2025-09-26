@@ -63,7 +63,7 @@ export class Sessions {
       },
     });
 
-    this.sessions[destinationIndex].send_impulse(`OpenIncoming:${dialed_address.length}`);
+    this.sessions[destinationIndex].send_impulse(`OpenIncoming:${dialed_address.length + 1}`);
   }
 
   public closeGate(origin: Session) {
