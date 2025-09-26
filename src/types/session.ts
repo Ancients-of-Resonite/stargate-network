@@ -8,6 +8,7 @@ export interface Session {
   // Format: "<ip>:<port>"
   remote: string;
   send_impulse: (tag: string) => void;
+  gate_relay: (relay: string) => void;
   connected_gate: {
     session?: Session;
   };

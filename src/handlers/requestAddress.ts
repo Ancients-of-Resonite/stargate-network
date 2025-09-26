@@ -71,6 +71,9 @@ export default async function requestAddress(
       send_impulse: (tag) => {
         socket.send(`Impulse:${tag}`)
       },
+      gate_relay: (relay) => {
+        socket.send(relay)
+      }
     });
 
     socket.send('{code:200,message:"Address accepted"}');
@@ -88,6 +91,9 @@ export default async function requestAddress(
       send_impulse: (tag) => {
         socket.send(`Impulse:${tag}`)
       },
+      gate_relay: (relay) => {
+        socket.send(relay)
+      }
     });
     socket.send('{code:200,message:"Address accepted"}');
     return;

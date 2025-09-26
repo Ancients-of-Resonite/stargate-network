@@ -29,7 +29,14 @@ Deno.serve({
   });
 
   socket.addEventListener("message", (event) => {
-    if (event.data.startsWith("IDC")) return;
+    if (event.data.startsWith("IDC")) {
+      const session = sessions.getSession(remote);
+
+      if (!session) return;
+      log.info(`Recieved gate relay from ${session.gate_address}${session.gate_code} (${green(remote)})`)
+      session.connected_gate.session?.gate_relay(event.data);
+      return;
+    };
 
     const data = JSON.parse(event.data);
     const ses_data = {
