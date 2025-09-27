@@ -5780,8 +5780,7 @@
           "npm:@types/pg@^8.15.5",
           "npm:drizzle-kit@~0.31.4",
           "npm:drizzle-orm@~0.44.5",
-          "npm:pg@^8.16.3",
-          "npm:pocketbase@0.21.2"
+          "npm:pg@^8.16.3"
         ]
       }
     }
