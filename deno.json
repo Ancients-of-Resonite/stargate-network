@@ -23,6 +23,6 @@
     "dash:build": "deno task --cwd ./apps/sgn-dash build"
   },
   "imports": {
-    "$shared/": "./packages/shared-utils/"
+    "$packages/": "./packages/"
   }
 }
