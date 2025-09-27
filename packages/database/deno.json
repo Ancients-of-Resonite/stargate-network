@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "db:migrate": "deno -A --env --node-modules-dir npm:drizzle-kit migrate",
+    "db:pull": "deno -A --env --node-modules-dir npm:drizzle-kit pull",
+    "db:push": "deno -A --env --node-modules-dir npm:drizzle-kit push",
+    "db:generate": "deno -A --env --node-modules-dir npm:drizzle-kit generate",
+    "db:studio": "deno -A --env --node-modules-dir npm:drizzle-kit studio"
+  },
+  "imports": {
+    "@/": "./src/",
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/pg": "npm:@types/pg@^8.15.5",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.4",
+    "drizzle-orm": "npm:drizzle-orm@^0.44.5",
+    "pg": "npm:pg@^8.16.3"
+  }
+}
