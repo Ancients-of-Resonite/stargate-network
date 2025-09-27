@@ -1,0 +1,24 @@
+{
+  "workspace": [
+    "apps/*",
+    "packages/*"
+  ],
+  "nodeModulesDir": "auto",
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "exclude": [
+        "no-unused-vars",
+        "no-explicit-any"
+      ]
+    }
+  },
+  "tasks": {
+    "lint": "deno lint"
+  },
+  "imports": {
+    "$shared/": "./packages/shared-utils/"
+  }
+}
