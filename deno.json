@@ -16,7 +16,11 @@
     }
   },
   "tasks": {
-    "lint": "deno lint"
+    "lint": "deno lint",
+
+    "socket:dev": "deno task --cwd ./apps/sgn-socket dev",
+    "dash:dev": "deno task --cwd ./apps/sgn-dash dev",
+    "dash:build": "deno task --cwd ./apps/sgn-dash build"
   },
   "imports": {
     "$shared/": "./packages/shared-utils/"
