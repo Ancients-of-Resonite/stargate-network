@@ -3,9 +3,9 @@ import { pb } from "../utils/pocketbase.ts";
 import { sessions } from "../main.ts";
 import { log } from "../utils/log.ts";
 import { cyan, magenta, red } from "colors";
-import { db } from "../utils/db.ts";
+import { db } from "$packages/database/src/db.ts";
 import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "../utils/drizzle/schema.ts";
+import { stargates as stargateSchema } from "$packages/database/src/schema.ts";
 
 export default async function dialRequest(
   { data, socket, remote }: {

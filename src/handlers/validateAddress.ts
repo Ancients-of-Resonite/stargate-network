@@ -3,9 +3,9 @@ import { pb } from "../utils/pocketbase.ts";
 import { sessions } from "../main.ts";
 import { log } from "../utils/log.ts";
 import { cyan, magenta, red } from "colors";
-import { db } from "../utils/db.ts";
+import { db } from "$packages/database/src/db.ts";
 import { eq } from "drizzle-orm";
-import { stargates } from "../utils/drizzle/schema.ts";
+import { stargates } from "$packages/database/src/schema.ts";
 import { SingleStoreColumnBuilderWithAutoIncrement } from "drizzle-orm/singlestore-core/columns";
 
 export default async function validateRequest(

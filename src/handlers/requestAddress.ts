@@ -2,9 +2,9 @@ import { cyan } from "colors";
 import { RequestAddress } from "@/types/messageTypes.ts";
 import { log } from "@/utils/log.ts";
 import { sessions } from "@/main.ts";
-import { db } from "../utils/db.ts";
+import { db } from "$packages/database/src/db.ts";
 import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "../utils/drizzle/schema.ts";
+import { stargates as stargateSchema } from "$packages/database/src/schema.ts";
 
 export default async function requestAddress(
   { data, socket, remote }: {

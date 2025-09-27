@@ -1,7 +1,7 @@
 import { sessions } from "../main.ts";
 import { UpdateData } from "../types/messageTypes.ts";
-import { db } from "../utils/db.ts";
-import { stargates as stargateSchema } from "../utils/drizzle/schema.ts";
+import { db } from "$packages/database/src/db.ts";
+import { stargates as stargateSchema } from "$packages/database/src/schema.ts";
 import { eq } from "drizzle-orm";
 
 export default async function updateData(data: UpdateData, remote: string) {

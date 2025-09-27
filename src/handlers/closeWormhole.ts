@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { sessions } from "../main.ts";
 import { DialRequest } from "../types/messageTypes.ts";
-import { db } from "../utils/db.ts";
-import { stargates } from "../utils/drizzle/schema.ts";
+import { db } from "$packages/database/src/db.ts";
+import { stargates } from "$packages/database/src/schema.ts";
 import { log } from "../utils/log.ts";
 import { pb } from "../utils/pocketbase.ts";
 
