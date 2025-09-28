@@ -1,6 +1,6 @@
 [submodule "apps/sgn-socket"]
 	path = apps/sgn-socket
-	url = git@github.com:Ancients-of-Resonite/sgn-socket.git
+	url = https://github.com/Ancients-of-Resonite/sgn-socket.git
 [submodule "apps/sgn-dash"]
 	path = apps/sgn-dash
-	url = git@github.com:Ancients-of-Resonite/sgn-dash.git
+	url = https://github.com/Ancients-of-Resonite/sgn-dash.git
