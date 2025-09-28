@@ -1,12 +1,13 @@
-FROM denoland/deno:alpine
+FROM denoland/deno
 
 WORKDIR /app
 
-EXPOSE 8000
+COPY ../../ .
 
-COPY . .
+RUN deno install
 
-RUN deno cache src/main.ts
+RUN deno install --config apps/sgn-socket/deno.json
 
-CMD ["run", "--allow-net", "--allow-env", "src/main.ts"]
+RUN deno compile --allow-env --allow-net --output ./sgn-socket apps/sgn-socket/src/main.ts
 
+CMD ["./sgn-socket"]
