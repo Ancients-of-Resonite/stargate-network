@@ -19,6 +19,7 @@
     "npm:consola@3.4.2": "3.4.2",
     "npm:debug@4.4.3": "4.4.3",
     "npm:devalue@5.3.2": "5.3.2",
+    "npm:drizzle-kit@*": "0.31.5_esbuild@0.25.10",
     "npm:drizzle-kit@~0.31.4": "0.31.5_esbuild@0.25.10",
     "npm:drizzle-orm@~0.44.5": "0.44.5_@types+pg@8.15.5_pg@8.16.3",
     "npm:entities@4.5.0": "4.5.0",
