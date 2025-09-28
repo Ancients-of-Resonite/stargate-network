@@ -1,0 +1,9 @@
+services:
+  sgn-dash:
+    build: ./apps/sgn-dash
+    ports:
+      - "3000:3000"
+  sgn-socket:
+    build: ./apps/sgn-socket
+    ports:
+      - "8000:8000"
