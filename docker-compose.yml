@@ -1,9 +1,15 @@
 services:
   sgn-dash:
-    build: ./apps/sgn-dash
+    env_file:
+      - ./.env
+    build:
+      dockerfile: ./Dockerfile.dash
     ports:
       - "3000:3000"
   sgn-socket:
-    build: ./apps/sgn-socket
+    env_file:
+      - ./.env
+    build:
+      dockerfile: ./Dockerfile.socket
     ports:
       - "8000:8000"
