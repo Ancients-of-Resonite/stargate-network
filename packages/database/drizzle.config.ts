@@ -7,7 +7,7 @@ export default defineConfig({
   dbCredentials: {
     database: Deno.env.get("DB_DATABASE"),
     host: Deno.env.get("DB_HOST"),
-    port: 5439,
+    port: Deno.env.get("DB_PORT") as unknown as number ?? 5432,
     user: Deno.env.get("DB_USER"),
     password: Deno.env.get("DB_PASS"),
     ssl: false,
