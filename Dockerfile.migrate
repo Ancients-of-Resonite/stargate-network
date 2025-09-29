@@ -1,0 +1,11 @@
+FROM denoland/deno
+
+WORKDIR /app
+
+COPY . .
+
+RUN deno install
+
+RUN deno install --config packages/database/deno.json
+
+CMD [ "sh -c" ]
