@@ -22,9 +22,15 @@
     "lint": "deno lint",
     "socket:dev": "deno task --cwd ./apps/sgn-socket dev",
     "dash:dev": "deno task --cwd ./apps/sgn-dash dev",
-    "dash:build": "deno task --cwd ./apps/sgn-dash build"
+    "dash:build": "deno task --cwd ./apps/sgn-dash build",
+    "db:migrate": "deno task --cwd ./packages/database db:migrate",
+
+    "dash": "deno task --cwd ./apps/sgn-dash"
   },
   "imports": {
-    "$packages/": "./packages/"
+    "$packages/": "./packages/",
+    "@nuxtjs/tailwindcss": "npm:@nuxtjs/tailwindcss@7.0.0-beta.0",
+    "tailwindcss": "npm:tailwindcss@^4.1.13",
+    "typescript": "npm:typescript@^5.9.2"
   }
 }
