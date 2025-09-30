@@ -4,14 +4,9 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-if (!Deno.env.get("DB_URL")) {
-  console.error("Please enter a DB_URL variable");
-  Deno.exit(5);
-}
-
 export const db = drizzle({
   client: new Pool({
-    connectionString: Deno.env.get("DB_URL"),
+    connectionString: process.env.DB_URL,
   }),
   schema: {
     stargateSchema,

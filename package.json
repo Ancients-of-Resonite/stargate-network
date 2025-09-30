@@ -1,0 +1,13 @@
+{
+  "name": "stargate-network",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "$packages/": "./packages/"
+  },
+  "packageManager": "pnpm@10.17.1"
+}
