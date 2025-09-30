@@ -1,10 +1,11 @@
+import { WebSocket } from "ws";
 import { eq } from "drizzle-orm";
-import { sessions } from "../main.ts";
-import { DialRequest } from "../types/messageTypes.ts";
-import { db } from "$packages/database/src/db.ts";
-import { stargates } from "$packages/database/src/schema.ts";
-import { log } from "../utils/log.ts";
-import { pb } from "../utils/pocketbase.ts";
+import { sessions } from "../main";
+import { DialRequest } from "../types/messageTypes";
+import { db } from "$packages/database/src/db";
+import { stargates } from "$packages/database/src/schema";
+import { log } from "../utils/log";
+
 
 export default async function closeWormhole(socket: WebSocket, remote: string) {
   const session = sessions.getSession(remote);

@@ -1,69 +1,76 @@
-import { log } from "@/utils/log.ts";
+import { WebSocketServer } from "ws";
 
-import { MessageType } from "@/types/messageTypes.ts";
-import dialRequest from "@/handlers/dialRequest.ts";
-import { pb } from "@/utils/pocketbase.ts";
-import { cyan, green, magenta, red } from "colors";
-import requestAddress from "@/handlers/requestAddress.ts";
-import { Sessions } from "./types/session.ts";
-import validateRequest from "./handlers/validateAddress.ts";
-import closeWormhole from "./handlers/closeWormhole.ts";
-import updateData from "./handlers/updateData.ts";
+import { log } from "@/utils/log";
+
+import { MessageType } from "@/types/messageTypes";
+import dialRequest from "@/handlers/dialRequest";
+import { cyan, green, magenta, red } from "@std/fmt/colors";
+import requestAddress from "@/handlers/requestAddress";
+import { Sessions } from "./types/session";
+import validateRequest from "./handlers/validateAddress";
+import closeWormhole from "./handlers/closeWormhole";
+import updateData from "./handlers/updateData";
+
+const wss = new WebSocketServer({
+  port: 8000,
+});
 
 export const sessions = new Sessions();
 
-Deno.serve({
-  port: Deno.env.get("WS_PORT") as unknown as number ?? 8000
-},(req, info) => {
-  if (req.headers.get("upgrade") != "websocket") {
-    return new Response(null, { status: 501 });
-  }
-  const remote = `${info.remoteAddr.hostname}:${info.remoteAddr.port}`;
+wss.on("listening", () => {
+  log.info("WebSocket server is listening on port 8000");
+});
 
-  const { socket, response } = Deno.upgradeWebSocket(req);
+wss.on("connection", (socket, req) => {
+  const remote = req.socket.remoteAddress + ":" + req.socket.remotePort;
 
-  socket.addEventListener("open", (_e) => {
-    log.info(
-      `A new client has connected: ${info.remoteAddr.hostname}:${info.remoteAddr.port}`,
-    );
+  log.info(`A new client has connected: ${green(remote)}`);
+
+  socket.addEventListener("close", (_ev) => {
+    log.info(`Client ${red(remote)} has disconnected from the network.`);
   });
 
-  socket.addEventListener("message", (event) => {
-    if (event.data.startsWith("IDC")) {
+  socket.addEventListener("message", (e) => {
+    const event = e.data.toString();
+
+    if (event.startsWith("IDC")) {
       const session = sessions.getSession(remote);
 
       if (!session) return;
-      log.info(`Recieved gate relay from ${session.gate_address}${session.gate_code} (${green(remote)})`)
-      session.connected_gate.session?.gate_relay(event.data);
+      log.info(
+        `Recieved gate relay from ${session.gate_address}${
+          session.gate_code
+        } (${green(remote)})`
+      );
+      session.connected_gate.session?.gate_relay(e.data as any);
       return;
-    };
+    }
 
-    const data = JSON.parse(event.data);
+    const data = JSON.parse(event);
     const ses_data = {
       data,
       socket,
       remote,
     };
+    console.log(data)
     switch (data.type) {
       case MessageType.RequestAddress:
         log.info(
-          `Client ${
-            green(remote)
-          } has requested address ${data.gate_address}${data.gate_code}`,
+          `Client ${green(remote)} has requested address ${data.gate_address}${
+            data.gate_code
+          }`
         );
         requestAddress(ses_data);
         break;
       case MessageType.DialRequest:
-        log.info(
-          `Client ${green(remote)} has requested to dial.`,
-        );
+        log.info(`Client ${green(remote)} has requested to dial.`);
         dialRequest(ses_data);
         break;
       case MessageType.ValidateAddress:
         log.info(
-          `Client ${remote} has requested to validate address ${
-            cyan(data.gate_address)
-          }${magenta(data.gate_code)}`,
+          `Client ${remote} has requested to validate address ${cyan(
+            data.gate_address
+          )}${magenta(data.gate_code)}`
         );
         validateRequest(ses_data);
         break;
@@ -82,14 +89,4 @@ Deno.serve({
         break;
     }
   });
-
-  socket.addEventListener("close", (_ev) => {
-    log.info(
-      `Client ${
-        red(info.remoteAddr.hostname + ":" + info.remoteAddr.port)
-      } has disconnected from the network.`,
-    );
-  });
-
-  return response;
 });

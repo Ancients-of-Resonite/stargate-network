@@ -1,4 +1,4 @@
-import { bold, cyan, gray, italic, red, yellow } from "colors";
+import { bold, cyan, gray, italic, red, yellow } from "@std/fmt/colors";
 
 export enum LogLevels {
   Debug,

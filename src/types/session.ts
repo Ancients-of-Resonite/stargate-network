@@ -1,4 +1,4 @@
-import { stargates as stargateSchema } from "$packages/database/src/schema.ts";
+import { stargates as stargateSchema } from "$packages/database/src/schema";
 
 export interface Session {
   id: string;

@@ -1,11 +1,12 @@
-import { DialRequest } from "@/types/messageTypes.ts";
-import { pb } from "../utils/pocketbase.ts";
-import { sessions } from "../main.ts";
-import { log } from "../utils/log.ts";
-import { cyan, magenta, red } from "colors";
-import { db } from "$packages/database/src/db.ts";
+import { WebSocket } from "ws";
+import { DialRequest } from "@/types/messageTypes";
+
+import { sessions } from "../main";
+import { log } from "../utils/log";
+import { cyan, magenta, red } from "@std/fmt/colors";
+import { db } from "$packages/database/src/db";
 import { eq } from "drizzle-orm";
-import { stargates } from "$packages/database/src/schema.ts";
+import { stargates } from "$packages/database/src/schema";
 import { SingleStoreColumnBuilderWithAutoIncrement } from "drizzle-orm/singlestore-core/columns";
 
 export default async function validateRequest(

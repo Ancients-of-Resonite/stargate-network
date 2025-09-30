@@ -3,7 +3,7 @@ let
 in
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
-    deno
-    lazysql
+    nodejs
+    pnpm
   ];
 }
