@@ -14,5 +14,5 @@
     </div>
   </header>
   <slot />
-  <div class="absolute bottom-1 left-1 right-1 text-center text-2xl text-foreground/50 pointer-events-none">Nou Ani Anquietas</div>
+  <div class="absolute bottom-1 left-1 right-1 text-center text-3xl text-foreground/50 pointer-events-none font-ancient">Nou Ani Anquietas</div>
 </template>
