@@ -9,5 +9,8 @@
   "dependencies": {
     "$packages/": "./packages/"
   },
-  "packageManager": "pnpm@10.17.1"
+  "packageManager": "pnpm@10.17.1",
+  "devDependencies": {
+    "tslib": "^2.8.1"
+  }
 }
