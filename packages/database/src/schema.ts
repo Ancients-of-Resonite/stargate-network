@@ -19,41 +19,20 @@ export const admin = pgRole("admin", {
 
 export const user = pgRole("user");
 
-export const stargates = pgTable(
-  "stargates",
-  {
-    id: uuid().primaryKey().unique().defaultRandom().notNull(),
-    gate_address: text().notNull(),
-    gate_code: text().notNull(),
-    owner_name: text().notNull(),
-    session_url: text().notNull(),
-    session_name: text().notNull(),
-    active_users: integer().notNull(),
-    max_users: integer().notNull(),
-    public_gate: boolean().notNull(),
-    is_headless: boolean().notNull(),
-    iris_state: boolean().notNull(),
-    gate_status: text(),
-  },
-  () => [
-    pgPolicy("admin-delete", {
-      as: "permissive",
-      to: admin,
-      for: "delete",
-    }),
-    pgPolicy("admin-insert", {
-      as: "permissive",
-      to: admin,
-      for: "insert",
-    }),
-    pgPolicy("public", {
-      as: "permissive",
-      to: "public",
-      for: "select",
-      withCheck: sql``,
-    }),
-  ],
-);
+export const stargates = pgTable("stargates", {
+  id: uuid().primaryKey().unique().defaultRandom().notNull(),
+  gate_address: text().notNull(),
+  gate_code: text().notNull(),
+  owner_name: text().notNull(),
+  session_url: text().notNull(),
+  session_name: text().notNull(),
+  active_users: integer().notNull(),
+  max_users: integer().notNull(),
+  public_gate: boolean().notNull(),
+  is_headless: boolean().notNull(),
+  iris_state: boolean().notNull(),
+  gate_status: text(),
+}).enableRLS();
 
 export const bannedIds = pgTable("banned_ids", {
   id: serial().primaryKey().notNull(),
@@ -69,3 +48,9 @@ export const users = pgTable("users", {
     enum: ["admin"],
   }),
 });
+
+export const stargateViewPolicy = pgPolicy("stargate_view_policy", {
+  as: "permissive",
+  to: "public",
+  using: sql`public_gate = true`
+}).link(stargates)

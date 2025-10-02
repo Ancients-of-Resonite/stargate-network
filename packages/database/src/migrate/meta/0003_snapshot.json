@@ -1,6 +1,6 @@
 {
-  "id": "de5df8c1-7734-4c5a-8a6f-f76385f76daa",
-  "prevId": "0d0d2b97-eace-483e-85d4-83cb9397d152",
+  "id": "1f48737a-7191-4f6b-bdda-8abbf82894fa",
+  "prevId": "5269863a-3731-46d4-a04f-97ac8cf01003",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -125,7 +125,17 @@
           ]
         }
       },
-      "policies": {},
+      "policies": {
+        "stargate_view_policy": {
+          "name": "stargate_view_policy",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "public_gate = true"
+        }
+      },
       "checkConstraints": {},
       "isRLSEnabled": false
     },

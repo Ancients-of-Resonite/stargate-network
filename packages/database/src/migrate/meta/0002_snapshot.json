@@ -1,6 +1,6 @@
 {
-  "id": "0d0d2b97-eace-483e-85d4-83cb9397d152",
-  "prevId": "8cef7472-1901-4316-becf-e5e9fa485f03",
+  "id": "5269863a-3731-46d4-a04f-97ac8cf01003",
+  "prevId": "931e4439-8f4e-41e2-aaa9-b6bf744e1cdc",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -125,7 +125,17 @@
           ]
         }
       },
-      "policies": {},
+      "policies": {
+        "stargate_view_policy": {
+          "name": "stargate_view_policy",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "withCheck": "public_gate = true"
+        }
+      },
       "checkConstraints": {},
       "isRLSEnabled": false
     },
@@ -179,7 +189,20 @@
   "enums": {},
   "schemas": {},
   "sequences": {},
-  "roles": {},
+  "roles": {
+    "admin": {
+      "name": "admin",
+      "createDb": true,
+      "createRole": true,
+      "inherit": true
+    },
+    "user": {
+      "name": "user",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    }
+  },
   "policies": {},
   "views": {},
   "_meta": {

@@ -1,6 +1,6 @@
 {
-  "id": "1ed824d5-5818-42b9-94f9-ab6a0657c725",
-  "prevId": "de5df8c1-7734-4c5a-8a6f-f76385f76daa",
+  "id": "3b89c550-4b16-475b-aa5d-92e3923d8d32",
+  "prevId": "1f48737a-7191-4f6b-bdda-8abbf82894fa",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -126,34 +126,18 @@
         }
       },
       "policies": {
-        "admin-delete": {
-          "name": "admin-delete",
+        "stargate_view_policy": {
+          "name": "stargate_view_policy",
           "as": "PERMISSIVE",
-          "for": "DELETE",
-          "to": [
-            "admin"
-          ]
-        },
-        "admin-insert": {
-          "name": "admin-insert",
-          "as": "PERMISSIVE",
-          "for": "INSERT",
-          "to": [
-            "admin"
-          ]
-        },
-        "public": {
-          "name": "public",
-          "as": "RESTRICTIVE",
-          "for": "SELECT",
+          "for": "ALL",
           "to": [
             "public"
           ],
-          "withCheck": ""
+          "using": "public_gate = true"
         }
       },
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.users": {
       "name": "users",

@@ -1,3 +1,5 @@
+CREATE ROLE "admin" WITH CREATEDB CREATEROLE;--> statement-breakpoint
+CREATE ROLE "user";--> statement-breakpoint
 CREATE TABLE "banned_ids" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -18,4 +20,12 @@ CREATE TABLE "stargates" (
 	"iris_state" boolean NOT NULL,
 	"gate_status" text,
 	CONSTRAINT "stargates_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" uuid DEFAULT gen_random_uuid(),
+	"username" text NOT NULL,
+	"email" text NOT NULL,
+	"tags" text,
+	CONSTRAINT "users_id_unique" UNIQUE("id")
 );
