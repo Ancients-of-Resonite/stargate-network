@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const gates = await $fetch("/api/stargates");
+useHead({
+  title: "AoR - Active Stargates",
+});
+const { data: gates } = await useFetch("/api/stargates");
 </script>
 
 <template>
