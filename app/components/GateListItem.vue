@@ -10,7 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <Card class="m-2 min-w-80 flex-1">
+  <Card class="m-2 min-w-80 flex-1 h-fit">
     <CardHeader>
       <CardTitle>
         <div class="flex gap-2 items-center">
@@ -30,9 +30,9 @@ const props = defineProps<{
           <span
             :class="{
               'font-mono': glyph_display == 'text',
-              'font-mw': glyph_display == 'mw',
-              'font-pg': glyph_display == 'pg',
-              'font-uni': glyph_display == 'uni',
+              'font-mw text-xl': glyph_display == 'mw',
+              'font-pg text-xl': glyph_display == 'pg',
+              'font-uni text-4xl': glyph_display == 'un',
             }"
             >{{ gate.gate_address
             }}<span class="text-primary">{{ gate.gate_code }}</span></span
@@ -51,6 +51,23 @@ const props = defineProps<{
         <div class="flex justify-between">
           <span class="font-bold">Status</span> {{ gate.gate_status }}
         </div>
+        
+        <!-- <div
+          class="bg-orange-300/10 p-2 rounded-md mt-2 flex justify-between items-center"
+          v-if="!gate.is_headless"
+        >
+          User Hosted Session
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <Icon name="tabler:info-circle" size="20" />
+            </TooltipTrigger>
+            <TooltipContent>
+              This session is hosted by a user and not a headless.<br />
+              If the host focuses into a different world the cross-session
+              functionality will be nolonger work.
+            </TooltipContent>
+          </Tooltip>
+        </div> -->
       </div>
     </CardContent>
   </Card>
