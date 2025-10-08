@@ -40,17 +40,3 @@ export const bannedIds = pgTable("banned_ids", {
   reason: text().notNull(),
 });
 
-export const users = pgTable("users", {
-  id: uuid().defaultRandom().unique(),
-  username: text().notNull(),
-  email: text().notNull(),
-  tags: text({
-    enum: ["admin"],
-  }),
-});
-
-export const stargateViewPolicy = pgPolicy("stargate_view_policy", {
-  as: "permissive",
-  to: "public",
-  using: sql`public_gate = true`
-}).link(stargates)

@@ -36,6 +36,13 @@
       "when": 1759365570864,
       "tag": "0004_luxuriant_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1759790578975,
+      "tag": "0005_legal_punisher",
+      "breakpoints": true
     }
   ]
 }
