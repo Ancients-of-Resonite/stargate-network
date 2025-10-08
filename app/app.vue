@@ -1,8 +1,10 @@
 <template>
   <div>
-    <Toaster />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <TooltipProvider>
+      <Toaster />
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </TooltipProvider>
   </div>
 </template>
