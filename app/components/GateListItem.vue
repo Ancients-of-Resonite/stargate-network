@@ -14,10 +14,20 @@ const props = defineProps<{
     <CardHeader>
       <CardTitle>
         <div class="flex gap-2 items-center">
-          <Icon
-            :name="gate.is_headless ? 'tabler:server' : 'tabler:user'"
-            size="22"
-          />
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <Icon
+                :name="gate.is_headless ? 'tabler:server' : 'tabler:user'"
+                :class="{
+                  'text-destructive': !gate.is_headless,
+                }"
+                size="22"
+              />
+            </TooltipTrigger>
+            <TooltipContent v-if="!gate.is_headless">
+              This is a user-hosted session. If the host user focuses another world the cross-session functionality will stop working.
+            </TooltipContent>
+          </Tooltip>
           <p class="text-lg">{{ gate.session_name }}</p>
         </div>
         <p class="font-normal text-sm">{{ gate.owner_name }}</p>
@@ -51,23 +61,6 @@ const props = defineProps<{
         <div class="flex justify-between">
           <span class="font-bold">Status</span> {{ gate.gate_status }}
         </div>
-        
-        <!-- <div
-          class="bg-orange-300/10 p-2 rounded-md mt-2 flex justify-between items-center"
-          v-if="!gate.is_headless"
-        >
-          User Hosted Session
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Icon name="tabler:info-circle" size="20" />
-            </TooltipTrigger>
-            <TooltipContent>
-              This session is hosted by a user and not a headless.<br />
-              If the host focuses into a different world the cross-session
-              functionality will be nolonger work.
-            </TooltipContent>
-          </Tooltip>
-        </div> -->
       </div>
     </CardContent>
   </Card>
