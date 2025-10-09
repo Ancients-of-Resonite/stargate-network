@@ -1,13 +1,12 @@
-FROM denoland/deno
+FROM nodejs:alpine
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /app-sgn_socket
 
 COPY . .
 
-RUN deno install
-
-RUN deno install --config apps/sgn-socket/deno.json
-
-RUN deno compile --allow-env --allow-net --output ./sgn-socket apps/sgn-socket/src/main.ts
+RUN
 
 CMD ["./sgn-socket"]
