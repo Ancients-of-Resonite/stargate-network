@@ -4,12 +4,12 @@ import "vue-sonner/style.css";
 </script>
 
 <template>
-  <div>
-    <TooltipProvider>
-      <Toaster />
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </TooltipProvider>
-  </div>
+    <div>
+        <TooltipProvider>
+            <Toaster />
+            <NuxtLayout>
+                <NuxtPage />
+            </NuxtLayout>
+        </TooltipProvider>
+    </div>
 </template>
