@@ -43,6 +43,13 @@
       "when": 1759790578975,
       "tag": "0005_legal_punisher",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1760105632587,
+      "tag": "0006_silly_black_knight",
+      "breakpoints": true
     }
   ]
 }
