@@ -6,6 +6,7 @@ definePageMeta({
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
+import { toast } from "vue-sonner";
 
 const auth = useAuthClient();
 
@@ -21,17 +22,15 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-    try {
-        await auth.signIn.email({
-            email: values.email,
-            password: values.password,
-        });
-    } catch (error) {
-        form.setErrors({
-            email: "Invalid email address or password",
-            password: "Invalid email address or password",
-        });
-        console.error(error);
+    const usr = await auth.signIn.email({
+        email: values.email,
+        password: values.password,
+    });
+
+    if (usr.data?.user) {
+        navigateTo("/");
+    } else {
+        toast.error(usr.error?.message || "Unknown error");
     }
 });
 
