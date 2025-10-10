@@ -7,6 +7,8 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 
+const auth = useAuthClient();
+
 const formSchema = toTypedSchema(
   z.object({
     email: z.email("Invalid email address"),
@@ -18,9 +20,28 @@ const form = useForm({
   validationSchema: formSchema,
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log(values);
+const onSubmit = form.handleSubmit(async (values) => {
+    try {
+        await auth.signIn.email({
+            email: values.email,
+            password: values.password,
+        });
+    } catch (error) {
+        form.setErrors({
+            email: "Invalid email address or password",
+            password: "Invalid email address or password",
+        });
+        console.error(error);
+    }
 });
+
+const discordLogin = async (e: FormDataEvent) => {
+    e.preventDefault();
+    const auth = useAuthClient();
+    auth.signIn.social({
+        provider: "discord",
+    });
+};
 </script>
 
 <template>
