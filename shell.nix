@@ -2,8 +2,7 @@
   pkgs ? import <nixpkgs> { },
 }:
 pkgs.mkShell {
-  buildInputs = [
-    pkgs.nodejs
-    pkgs.pnpm
+  buildInputs = with pkgs; [
+    bun
   ];
 }
