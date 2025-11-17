@@ -4,9 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "AoR - Stargate Network Dashboard"
+      title: "AoR - Stargate Network Dashboard",
     },
   },
+  ssr: false,
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   modules: ["shadcn-nuxt", "@vueuse/nuxt", "@nuxtjs/color-mode", "@nuxt/icon"],

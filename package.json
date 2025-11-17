@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "database":"workspace:*",
     "@nuxt/icon": "2.0.0",
     "@tailwindcss/vite": "^4.1.13",
     "@tanstack/vue-table": "^8.21.3",

@@ -1,7 +1,7 @@
-import { db } from "$packages/database/src/db";
+import { db } from "database/src/db";
 
-export * as schema from "$packages/database/src/schema";
-export * as authSchema from "$packages/database/src/auth-schema";
+export * as schema from "database/src/schema";
+export * as authSchema from "database/src/auth-schema";
 
 export function useDrizzle() {
   return db;
