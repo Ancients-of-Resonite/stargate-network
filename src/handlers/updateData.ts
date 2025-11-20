@@ -1,8 +1,8 @@
 import { WebSocket } from "ws";
 import { sessions } from "../main";
 import { UpdateData } from "../types/messageTypes";
-import { db } from "$packages/database/src/db";
-import { stargates as stargateSchema } from "$packages/database/src/schema";
+import { db } from "database/src/db";
+import { stargates as stargateSchema } from "database/src/schema";
 import { eq } from "drizzle-orm";
 
 export default async function updateData(data: UpdateData, remote: string) {

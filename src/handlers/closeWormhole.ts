@@ -2,8 +2,8 @@ import { WebSocket } from "ws";
 import { eq } from "drizzle-orm";
 import { sessions } from "../main";
 import { DialRequest } from "../types/messageTypes";
-import { db } from "$packages/database/src/db";
-import { stargates } from "$packages/database/src/schema";
+import { db } from "database/src/db";
+import { stargates } from "database/src/schema";
 import { log } from "../utils/log";
 
 

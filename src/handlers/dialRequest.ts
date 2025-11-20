@@ -4,9 +4,9 @@ import { DialRequest } from "@/types/messageTypes";
 import { sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
-import { db } from "$packages/database/src/db";
+import { db } from "database/src/db";
 import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "$packages/database/src/schema";
+import { stargates as stargateSchema } from "database/src/schema";
 
 export default async function dialRequest(
   { data, socket, remote }: {

@@ -3,9 +3,9 @@ import { cyan } from "@std/fmt/colors";
 import { RequestAddress } from "@/types/messageTypes";
 import { log } from "@/utils/log";
 import { sessions } from "@/main";
-import { db } from "$packages/database/src/db";
+import { db } from "database/src/db";
 import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "$packages/database/src/schema";
+import { stargates as stargateSchema } from "database/src/schema";
 
 export default async function requestAddress(
   { data, socket, remote }: {
