@@ -50,6 +50,20 @@
       "when": 1760105632587,
       "tag": "0006_silly_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1763421173993,
+      "tag": "0007_pale_hannibal_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1763426491483,
+      "tag": "0008_colorful_toro",
+      "breakpoints": true
     }
   ]
 }

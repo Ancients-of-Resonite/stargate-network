@@ -32,11 +32,22 @@ export const stargates = pgTable("stargates", {
   is_headless: boolean().notNull(),
   iris_state: boolean().notNull(),
   gate_status: text(),
-}).enableRLS();
+}, (t) => [
+  pgPolicy('admin', {
+    as: "permissive",
+    to: admin,
+    for: "delete",
+  }),
+  pgPolicy("public_read", {
+    as: "permissive",
+    to: "public",
+    for: "select",
+    using: sql`(${t.public_gate} = true)`
+  })
+]);
 
 export const bannedIds = pgTable("banned_ids", {
   id: serial().primaryKey().notNull(),
   user_id: text().notNull(),
   reason: text().notNull(),
 });
-
