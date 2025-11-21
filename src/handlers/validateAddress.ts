@@ -4,7 +4,7 @@ import { DialRequest } from "@/types/messageTypes";
 import { sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
-import { db } from "database/src/db";
+import { db, prisma } from "database/src/db";
 import { eq } from "drizzle-orm";
 import { stargates } from "database/src/schema";
 import { SingleStoreColumnBuilderWithAutoIncrement } from "drizzle-orm/singlestore-core/columns";
@@ -34,8 +34,10 @@ export default async function validateRequest(
     }
 
     try {
-      const gate = await db.query.stargateSchema.findFirst({
-        where: eq(stargates.gate_address, address)
+      const gate = await prisma.stargates.findFirst({
+        where: {
+          gate_address: address
+        }
       })
 
       if (!gate) {

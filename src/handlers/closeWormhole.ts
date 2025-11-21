@@ -2,7 +2,7 @@ import { WebSocket } from "ws";
 import { eq } from "drizzle-orm";
 import { sessions } from "../main";
 import { DialRequest } from "../types/messageTypes";
-import { db } from "database/src/db";
+import { db, prisma } from "database/src/db";
 import { stargates } from "database/src/schema";
 import { log } from "../utils/log";
 
@@ -16,12 +16,16 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
     } to ${session.connected_gate.session?.gate_address} ${session.connected_gate.session?.gate_code}`,
   );
 
-  const outgoing_gate = await db.query.stargateSchema.findFirst({
-    where: eq(stargates.id, session.connected_gate.session!.id),
+  const outgoing_gate = await prisma.stargates.findFirst({
+      where: {
+        id: session.connected_gate.session!.id
+      },
   });
 
-  const this_gate = await db.query.stargateSchema.findFirst({
-    where: eq(stargates.id, session.id),
+  const this_gate = await prisma.stargates.findFirst({
+    where: {
+      id: session.id
+      },
   });
 
   if (!outgoing_gate) {
@@ -35,20 +39,6 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
   }
 
   sessions.closeGate(session)
-
-  // await db.update(stargates).set({
-  //   id: outgoing_gate.id,
-  //   gate_status: "IDLE",
-  // }).where(
-  //   eq(stargates.id, outgoing_gate.id!),
-  // );
-
-  // await db.update(stargates).set({
-  //   id: this_gate.id,
-  //   gate_status: "IDLE",
-  // }).where(
-  //   eq(stargates.id, this_gate.id),
-  // );
 
   socket.send("200");
 }

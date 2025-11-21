@@ -52,7 +52,6 @@ wss.on("connection", (socket, req) => {
       socket,
       remote,
     };
-    console.log(data)
     switch (data.type) {
       case MessageType.RequestAddress:
         log.info(

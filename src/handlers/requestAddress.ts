@@ -3,7 +3,7 @@ import { cyan } from "@std/fmt/colors";
 import { RequestAddress } from "@/types/messageTypes";
 import { log } from "@/utils/log";
 import { sessions } from "@/main";
-import { db } from "database/src/db";
+import { db, prisma } from "database/src/db";
 import { eq } from "drizzle-orm";
 import { stargates as stargateSchema } from "database/src/schema";
 
@@ -14,8 +14,10 @@ export default async function requestAddress(
     remote: string;
   },
 ) {
-  const eg = await db.query.stargateSchema.findFirst({
-    where: eq(stargateSchema.gate_address, data.gate_address),
+  const eg = await prisma.stargates.findFirst({
+    where: {
+      gate_address: data.gate_address,
+    },
   });
 
   if (!eg) {
@@ -24,26 +26,30 @@ export default async function requestAddress(
     );
 
     try {
-      await db.insert(stargateSchema).values({
-        gate_address: data.gate_address,
-        gate_code: data.gate_code,
-        max_users: data.max_users,
-        gate_status: "IDLE",
-        iris_state: false,
-        owner_name: data.host_id,
-        session_name: data.gate_name,
-        session_url: data.session_id,
-        active_users: data.current_users,
-        is_headless: data.is_headless,
-        public_gate: data.public,
-      });
+      await prisma.stargates.create({
+        data: {
+          gate_address: data.gate_address,
+          gate_code: data.gate_code,
+          max_users: data.max_users,
+          gate_status: "IDLE",
+          iris_state: false,
+          owner_name: data.host_id,
+          session_name: data.gate_name,
+          session_url: data.session_id,
+          active_users: data.current_users,
+          is_headless: data.is_headless,
+          public_gate: data.public,
+        }
+      })
     } catch (err) {
       console.log(err);
     }
 
-    const gate = await db.query.stargateSchema.findFirst({
-      where: eq(stargateSchema.gate_address, data.gate_address),
-    });
+    const gate = await prisma.stargates.findFirst({
+      where: {
+        gate_address: data.gate_address
+      }
+    })
 
     if (!gate) {
       log.error(
@@ -56,7 +62,11 @@ export default async function requestAddress(
       const gate = sessions.getSession(remote);
 
       if (gate) {
-        await db.delete(stargateSchema).where(eq(stargateSchema.id, gate.id));
+        await prisma.stargates.delete({
+          where: {
+            id: gate.id
+          }
+        })
         sessions.removeSession(`${remote}`);
       }
       return;

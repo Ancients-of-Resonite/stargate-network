@@ -4,7 +4,7 @@ import { DialRequest } from "@/types/messageTypes";
 import { sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
-import { db } from "database/src/db";
+import { db, prisma } from "database/src/db";
 import { eq } from "drizzle-orm";
 import { stargates as stargateSchema } from "database/src/schema";
 
@@ -33,9 +33,11 @@ export default async function dialRequest(
     }
 
     try {
-      const gate = await db.query.stargateSchema.findFirst({
-        where: eq(stargateSchema.gate_address, address),
-      });
+      const gate = await prisma.stargates.findFirst({
+        where: {
+          gate_address: address
+        }
+      })
 
       if (!gate) {
         log.info(`Dialout failed, gate not found`);
@@ -51,11 +53,6 @@ export default async function dialRequest(
             remote: remote,
           });
           sessions.dialSession(session, data.gate_address)
-          await db.update(stargateSchema).set({
-            gate_status: `INCOMING${data.gate_address.length + 1}`,
-          }).where(
-            eq(stargateSchema.gate_address, address),
-          );
           log.info(
             `Dialout from ${
               cyan(session.gate_address) + magenta(session.gate_code)
@@ -80,12 +77,6 @@ export default async function dialRequest(
         socket.send("CSDialCheck:302");
         return;
       }
-
-      // db.update(stargateSchema).set({
-      //   gate_status: `INCOMING${data.gate_address.length + 1}`,
-      // }).where(
-      //   eq(stargateSchema.gate_address, address),
-      // );
 
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
