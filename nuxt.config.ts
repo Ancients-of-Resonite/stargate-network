@@ -10,7 +10,12 @@ export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["shadcn-nuxt", "@vueuse/nuxt", "@nuxtjs/color-mode", "@nuxt/icon"],
+  modules: [
+    "shadcn-nuxt",
+    "@vueuse/nuxt",
+    "@nuxtjs/color-mode",
+    "@nuxt/icon",
+  ],
   css: ["@/assets/css/main.css"],
   colorMode: {
     classSuffix: "",

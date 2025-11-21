@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "dev": "bunx --bun nuxt dev",
+    "generate": "bunx --bun nuxt generate",
+    "preview": "bunx --bun nuxt preview",
+    "postinstall": "bunx --bun nuxt prepare"
   },
   "dependencies": {
     "@nuxt/icon": "2.0.0",
