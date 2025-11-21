@@ -1,5 +1,5 @@
 import { defineConfig } from "drizzle-kit";
-
+import "./compression-polyfill"
 
 export default defineConfig({
   out: "./src/migrate",

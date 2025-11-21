@@ -42,7 +42,7 @@ export const stargates = pgTable("stargates", {
     as: "permissive",
     to: "public",
     for: "select",
-    using: sql`(${t.public_gate} = true)`
+    using: sql`${t.public_gate} = false`
   })
 ]);
 
