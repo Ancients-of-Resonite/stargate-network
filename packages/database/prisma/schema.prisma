@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
@@ -20,7 +14,7 @@ model User {
   emailVerified Boolean   @default(false)
   image         String?
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  updatedAt     DateTime  @updatedAt
   tags          String[]
   sessions      Session[]
   accounts      Account[]
@@ -41,6 +35,7 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
+  @@index([userId])
   @@map("session")
 }
 
@@ -61,6 +56,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
   tags                  String[]
 
+  @@index([userId])
   @@map("account")
 }
 
@@ -70,28 +66,29 @@ model Verification {
   value      String
   expiresAt  DateTime
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
+  updatedAt  DateTime @updatedAt
 
+  @@index([identifier])
   @@map("verification")
 }
 
 model Stargates {
-  id        String   @id @default(uuid())
-  gate_address String @unique
-  gate_code String
-  gate_status String @default("IDLE")
-  public_gate Boolean
-  owner_name String
-  session_url String
+  id           String  @id @default(uuid())
+  gate_address String  @unique
+  gate_code    String
+  gate_status  String  @default("IDLE")
+  public_gate  Boolean
+  owner_name   String
+  session_url  String
   session_name String
   active_users Int
-  max_users Int
-  is_headless Boolean
-  iris_state Boolean
+  max_users    Int
+  iris_state   Boolean
+  is_headless  Boolean
 }
 
 model BannedUsers {
-  id        String   @id @default(uuid())
-  user_id   String   @unique
-  reason    String
+  id      String @id @default(uuid())
+  user_id String @unique
+  reason  String
 }
