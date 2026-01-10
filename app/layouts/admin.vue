@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { user } = await useAuthUser();
+const path = useRoute().path;
 </script>
 
 <template>
@@ -41,8 +42,11 @@ const { user } = await useAuthUser();
       </SidebarContent>
     </Sidebar>
     <SidebarInset class="bg-transparent p-2">
-      <header class="flex gap-2 p-2 bg-sidebar border-sidebar rounded-lg">
+      <header
+        class="flex gap-2 p-2 bg-sidebar rounded-lg border border-sidebar-border"
+      >
         <SidebarTrigger />
+        {{ path }}
       </header>
       <slot />
     </SidebarInset>
