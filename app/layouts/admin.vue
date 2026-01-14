@@ -1,11 +1,19 @@
 <script setup lang="ts">
 const { user } = await useAuthUser();
 const path = useRoute().path;
+
+import type { User } from "database/prisma/generated/prisma/client";
+
+const data = ref<User[]>([]);
+
+onMounted(async () => {
+  data.value = await useFetch("/api/users");
+});
 </script>
 
 <template>
   <SidebarProvider>
-    <Sidebar variant="floating">
+    <Sidebar variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -37,11 +45,16 @@ const path = useRoute().path;
                 Stargates
               </SidebarMenuButton>
             </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton as="a" href="/admin/users">
+                Users
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-    <SidebarInset class="bg-transparent p-2">
+    <SidebarInset class="p-2">
       <header
         class="flex gap-2 p-2 bg-sidebar rounded-lg border border-sidebar-border"
       >
@@ -57,10 +70,3 @@ const path = useRoute().path;
     </div>
   </SidebarProvider>
 </template>
-
-<style>
-body {
-  background: url("/images/background.png") no-repeat center center fixed;
-  background-size: cover;
-}
-</style>
