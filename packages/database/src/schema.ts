@@ -21,7 +21,7 @@ export const admin = pgRole("admin", {
 
 export const user = pgRole("user");
 
-export const stargates = pgTable("stargates", {
+export const stargate = pgTable("stargates", {
   id: uuid().primaryKey().unique().defaultRandom().notNull(),
   gate_address: text().notNull(),
   gate_code: text().notNull(),
