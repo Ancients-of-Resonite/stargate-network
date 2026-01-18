@@ -1,6 +1,8 @@
 import {
   boolean,
   integer,
+  json,
+  pgEnum,
   pgPolicy,
   pgRole,
   pgTable,
@@ -45,6 +47,14 @@ export const stargates = pgTable("stargates", {
     using: sql`${t.public_gate} = false`
   })
 ]);
+
+export const gateLogType = pgEnum('gate_log_type', ['DIALOUT', 'CLOSE', 'DELETE', 'CREATE'])
+
+export const gateLog = pgTable("gate_log", {
+  id: uuid().primaryKey().unique().defaultRandom(),
+  type: gateLogType(),
+  data: json().notNull()
+})
 
 export const bannedIds = pgTable("banned_ids", {
   id: serial().primaryKey().notNull(),
