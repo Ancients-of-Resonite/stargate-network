@@ -1,1 +1,0 @@
-ALTER POLICY "public_read" ON "stargates" TO public USING ("stargates"."public_gate" = false);

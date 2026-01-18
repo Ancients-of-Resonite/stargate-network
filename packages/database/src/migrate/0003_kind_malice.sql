@@ -1,1 +1,0 @@
-ALTER POLICY "stargate_view_policy" ON "stargates" TO public USING (public_gate = true) WITH CHECK  (public_gate = true);

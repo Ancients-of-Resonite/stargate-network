@@ -5,71 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1759359955475,
-      "tag": "0000_clammy_vivisector",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1759359958140,
-      "tag": "0001_even_anthem",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1759360179596,
-      "tag": "0002_mushy_hobgoblin",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1759360389127,
-      "tag": "0003_kind_malice",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1759365570864,
-      "tag": "0004_luxuriant_warpath",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1759790578975,
-      "tag": "0005_legal_punisher",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1760105632587,
-      "tag": "0006_silly_black_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1763421173993,
-      "tag": "0007_pale_hannibal_king",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1763426491483,
-      "tag": "0008_colorful_toro",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1763631611196,
-      "tag": "0009_cheerful_bloodstrike",
+      "when": 1768762914160,
+      "tag": "0000_married_mysterio",
       "breakpoints": true
     }
   ]

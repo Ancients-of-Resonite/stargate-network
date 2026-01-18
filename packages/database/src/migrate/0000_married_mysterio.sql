@@ -1,3 +1,36 @@
+CREATE TYPE "public"."gate_log_type" AS ENUM('DIALOUT', 'CLOSE', 'DELETE', 'CREATE');--> statement-breakpoint
+CREATE ROLE "admin" WITH CREATEDB CREATEROLE;--> statement-breakpoint
+CREATE ROLE "user";--> statement-breakpoint
+CREATE TABLE "banned_ids" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"reason" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "gate_log" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"type" "gate_log_type",
+	"data" json NOT NULL,
+	CONSTRAINT "gate_log_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE "stargates" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"gate_address" text NOT NULL,
+	"gate_code" text NOT NULL,
+	"owner_name" text NOT NULL,
+	"session_url" text NOT NULL,
+	"session_name" text NOT NULL,
+	"active_users" integer NOT NULL,
+	"max_users" integer NOT NULL,
+	"public_gate" boolean NOT NULL,
+	"is_headless" boolean NOT NULL,
+	"iris_state" boolean NOT NULL,
+	"gate_status" text,
+	CONSTRAINT "stargates_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+ALTER TABLE "stargates" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"account_id" text NOT NULL,
@@ -34,6 +67,7 @@ CREATE TABLE "user" (
 	"image" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"tags" text[],
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -46,8 +80,7 @@ CREATE TABLE "verification" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "users" DISABLE ROW LEVEL SECURITY;--> statement-breakpoint
-DROP TABLE "users" CASCADE;--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-DROP POLICY "stargate_view_policy" ON "stargates" CASCADE;
+CREATE POLICY "admin" ON "stargates" AS PERMISSIVE FOR DELETE TO "admin";--> statement-breakpoint
+CREATE POLICY "public_read" ON "stargates" AS PERMISSIVE FOR SELECT TO public USING ("stargates"."public_gate" = false);
