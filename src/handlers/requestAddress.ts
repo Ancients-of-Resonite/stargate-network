@@ -3,9 +3,8 @@ import { cyan } from "@std/fmt/colors";
 import { RequestAddress } from "@/types/messageTypes";
 import { log } from "@/utils/log";
 import { sessions } from "@/main";
-import { db, prisma } from "database/src/db";
-import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "database/src/schema";
+import { db, eq } from "database/src/db";
+import { gateLog, stargate } from "database/src/schema";
 
 export default async function requestAddress(
   { data, socket, remote }: {
@@ -14,11 +13,7 @@ export default async function requestAddress(
     remote: string;
   },
 ) {
-  const eg = await prisma.stargates.findFirst({
-    where: {
-      gate_address: data.gate_address,
-    },
-  });
+  const eg = (await db.select().from(stargate).where(eq(stargate.gate_address, data.gate_address)))[0]
 
   if (!eg) {
     log.info(
@@ -26,8 +21,7 @@ export default async function requestAddress(
     );
 
     try {
-      await prisma.stargates.create({
-        data: {
+      await db.insert(stargate).values({
           gate_address: data.gate_address,
           gate_code: data.gate_code,
           max_users: data.max_users,
@@ -39,17 +33,12 @@ export default async function requestAddress(
           active_users: data.current_users,
           is_headless: data.is_headless,
           public_gate: data.public,
-        }
       })
     } catch (err) {
       console.log(err);
     }
 
-    const gate = await prisma.stargates.findFirst({
-      where: {
-        gate_address: data.gate_address
-      }
-    })
+    const gate = (await db.select().from(stargate).where(eq(stargate.gate_address, data.gate_address)))[0]
 
     if (!gate) {
       log.error(
@@ -62,11 +51,9 @@ export default async function requestAddress(
       const gate = sessions.getSession(remote);
 
       if (gate) {
-        await prisma.stargates.delete({
-          where: {
-            id: gate.id
-          }
-        })
+        await db
+            .delete(stargate)
+            .where(eq(stargate.id, gate.id))
         sessions.removeSession(`${remote}`);
       }
       return;
@@ -87,6 +74,15 @@ export default async function requestAddress(
       }
     });
 
+    await db.insert(gateLog)
+        .values({
+          type: "CREATE",
+          data: {
+            gate: gate.gate_address + gate.gate_code,
+            status: 200,
+            message: "Gate created successfully"
+          }
+        })
     socket.send('{code:200,message:"Address accepted"}');
   } else if (eg.session_url == data.session_id) {
     log.info(
@@ -106,12 +102,29 @@ export default async function requestAddress(
         socket.send(relay)
       }
     });
+    await db.insert(gateLog)
+        .values({
+          type: "CREATE",
+          data: {
+            gate: data.gate_address + data.gate_code,
+            status: 200,
+            message: "Gate already exists with this session url, accepted request"
+          }
+        })
     socket.send('{code:200,message:"Address accepted"}');
     return;
   } else {
+    await db.insert(gateLog)
+        .values({
+          type: "CREATE",
+          data: {
+            gate: data.gate_address + data.gate_code,
+            status: 403,
+            message: "Denied request, address already taken"
+          }
+        })
     log.info(
-      `Denied request for address ${data.gate_address}${data.gate_code} for client ${
-        cyan(remote)
+      `Denied request for address ${data.gate_address}${data.gate_code} for client ${cyan(remote)
       }. Address already taken`,
     );
     socket.send("403");

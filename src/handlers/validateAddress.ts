@@ -4,10 +4,8 @@ import { DialRequest } from "@/types/messageTypes";
 import { sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
-import { db, prisma } from "database/src/db";
-import { eq } from "drizzle-orm";
-import { stargates } from "database/src/schema";
-import { SingleStoreColumnBuilderWithAutoIncrement } from "drizzle-orm/singlestore-core/columns";
+import { db, eq } from "database/src/db";
+import { stargate } from "database/src/schema";
 
 export default async function validateRequest(
   { data, socket, remote }: {
@@ -34,11 +32,7 @@ export default async function validateRequest(
     }
 
     try {
-      const gate = await prisma.stargates.findFirst({
-        where: {
-          gate_address: address
-        }
-      })
+      const gate = (await db.select().from(stargate).where(eq(stargate.id, address)))[0]
 
       if (!gate) {
         console.log(`Dialout from ${session.gate_address}${session.gate_code} (${cyan(remote)}) failed, no gate found.`)

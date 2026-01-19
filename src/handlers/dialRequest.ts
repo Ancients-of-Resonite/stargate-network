@@ -4,9 +4,8 @@ import { DialRequest } from "@/types/messageTypes";
 import { sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
-import { db, prisma } from "database/src/db";
-import { eq } from "drizzle-orm";
-import { stargates as stargateSchema } from "database/src/schema";
+import { db, eq } from "database/src/db";
+import { gateLog, stargate } from "database/src/schema";
 
 export default async function dialRequest(
   { data, socket, remote }: {
@@ -33,15 +32,20 @@ export default async function dialRequest(
     }
 
     try {
-      const gate = await prisma.stargates.findFirst({
-        where: {
-          gate_address: address
-        }
-      })
+      const gate = (await db.select().from(stargate).where(eq(stargate.gate_address, address)))[0]
 
       if (!gate) {
         log.info(`Dialout failed, gate not found`);
         socket.send("CSDialCheck:404");
+        await db.insert(gateLog).values({
+          type: "DIALOUT",
+          data: {
+            origin_gate: session.gate_address + session.gate_code,
+            end_gate: address + code,
+            status: 404,
+            message: "Gate not found"
+          }
+        })
         return;
       }
 
@@ -54,30 +58,62 @@ export default async function dialRequest(
           });
           sessions.dialSession(session, data.gate_address)
           log.info(
-            `Dialout from ${
-              cyan(session.gate_address) + magenta(session.gate_code)
-            } to ${
-              cyan(gate.gate_address) + magenta(gate.gate_code)
+            `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } to ${cyan(gate.gate_address) + magenta(gate.gate_code)
             } was successful.`,
           );
+          await db.insert(gateLog).values({
+            type: "DIALOUT",
+            data: {
+              origin_gate: session.gate_address + session.gate_code,
+              end_gate: address + code,
+              status: 200,
+              message: "Dialout successful"
+            }
+          })
           return;
         } else {
           socket.send("CSDialCheck:302");
           log.info(
-            `Dialout from ${
-              cyan(session.gate_address) + magenta(session.gate_code)
-            } to ${
-              cyan(gate.gate_address) + magenta(gate.gate_code)
+            `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } to ${cyan(gate.gate_address) + magenta(gate.gate_code)
             } failed with code ${red("302")}.`,
           );
+          await db.insert(gateLog).values({
+            type: "DIALOUT",
+            data: {
+              origin_gate: session.gate_address + session.gate_code,
+              end_gate: address + code,
+              status: 302,
+              message: "Incorrect gate code"
+            }
+          })
           return;
         }
       }
       if (gate.gate_code != session.gate_code) {
         socket.send("CSDialCheck:302");
+        await db.insert(gateLog).values({
+          type: "DIALOUT",
+          data: {
+            origin_gate: session.gate_address + session.gate_code,
+            end_gate: address + code,
+            status: 302,
+            message: "Incorrect gate code"
+          }
+        })
         return;
       }
 
+      await db.insert(gateLog).values({
+        type: "DIALOUT",
+        data: {
+          origin_gate: session.gate_address + session.gate_code,
+          end_gate: address + code,
+          status: 200,
+          message: "Dialout successful"
+        }
+      })
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
       sessions.dialSession(session, data.gate_address)
@@ -86,6 +122,15 @@ export default async function dialRequest(
       log.error(
         "Something failed... Check error message \n --- Error Message ---",
       );
+      await db.insert(gateLog).values({
+        type: "DIALOUT",
+        data: {
+          origin_gate: session.gate_address + session.gate_code,
+          end_gate: address + code,
+          status: 500,
+          message: err
+        }
+      })
       console.error(err);
       return;
     }

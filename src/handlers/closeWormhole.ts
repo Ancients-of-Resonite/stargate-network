@@ -1,44 +1,65 @@
 import { WebSocket } from "ws";
-import { eq } from "drizzle-orm";
 import { sessions } from "../main";
 import { DialRequest } from "../types/messageTypes";
-import { db, prisma } from "database/src/db";
-import { stargates } from "database/src/schema";
+import { db } from "database/src/db";
+import { gateLog, stargate } from "database/src/schema";
+
 import { log } from "../utils/log";
+import { eq } from "database/src/db";
 
 
 export default async function closeWormhole(socket: WebSocket, remote: string) {
   const session = sessions.getSession(remote);
   if (!session?.connected_gate.session) return;
   log.info(
-    `Client ${remote} has requested to close connection from ${
-      session.gate_address + session.gate_code
+    `Client ${remote} has requested to close connection from ${session.gate_address + session.gate_code
     } to ${session.connected_gate.session?.gate_address} ${session.connected_gate.session?.gate_code}`,
   );
 
-  const outgoing_gate = await prisma.stargates.findFirst({
-      where: {
-        id: session.connected_gate.session!.id
-      },
-  });
+  const outgoing_gate = await db.select().from(stargate).where(eq(stargate.id, session.connected_gate.session.id))
 
-  const this_gate = await prisma.stargates.findFirst({
-    where: {
-      id: session.id
-      },
-  });
+  const this_gate = await db.select().from(stargate).where(eq(stargate.id, session.id));
 
   if (!outgoing_gate) {
     log.error(`Gate ${session.connected_gate.session?.gate_address} was not found`);
+    await db.insert(gateLog).values({
+      type: "CLOSE",
+      data: {
+        origin_gate: session.gate_address ?? "UNKNOWN",
+        end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
+        status: 404,
+        message: 'Unable to find connected gate',
+        remote: remote
+      }
+    })
     return;
   }
 
   if (!this_gate) {
     log.error(`Gate ${session.gate_address}${session.gate_code} was not found`);
+    await db.insert(gateLog).values({
+      type: "CLOSE",
+      data: {
+        origin_gate: session.gate_address ?? "UNKNOWN",
+        end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
+        status: 404,
+        message: 'Unable to find active session stargate',
+        remote: remote
+      }
+    })
     return;
   }
 
+  await db.insert(gateLog).values({
+    type: "CLOSE",
+    data: {
+      origin_gate: session.gate_address ?? "UNKNOWN",
+      end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
+      status: 200,
+      message: 'Successfully closed gates',
+      remote: remote
+    }
+  })
   sessions.closeGate(session)
-
   socket.send("200");
 }
