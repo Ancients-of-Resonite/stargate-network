@@ -1,6 +1,4 @@
-import { stargates as stargateSchema } from "database/src/schema";
-
-export interface Session {
+export type Session = {
   id: string;
   gate_address: string;
   gate_code: string;
@@ -14,7 +12,7 @@ export interface Session {
   };
 }
 
-export interface updateSession {
+export type updateSession = {
   id?: string;
   gate_address?: string;
   gate_code?: string;
