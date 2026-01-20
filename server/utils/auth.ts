@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "database/src/db";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "database/src/db";
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -21,15 +21,15 @@ export const auth = betterAuth({
       },
     },
   },
-    user: {
-      additionalFields: {
-        tags: {
-          type: "string[]",
-          default: ["user"],
-        },
+  user: {
+    additionalFields: {
+      tags: {
+        type: "string[]",
+        default: ["user"],
       },
     },
-  database: prismaAdapter(prisma, {
-    provider: "postgresql"
+  },
+  database: drizzleAdapter(db, {
+    provider: "pg"
   }),
 });
