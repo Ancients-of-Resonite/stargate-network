@@ -1,8 +1,11 @@
-<script lang="ts">
+<script setup lang="ts">
 definePageMeta({
   middleware: ["admin"],
   layout: "admin",
 });
+
+const {data: stargates} = await useFetch("/api/stargates")
+const {data: users} = await useFetch("/api/users")
 </script>
 
 <template>
@@ -16,60 +19,31 @@ definePageMeta({
           <h1
             class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
           >
-            20
+            {{stargates?.length ?? 0}}
           </h1>
         </CardContent>
       </Card>
       <Card class="flex-1">
         <CardHeader>
-          <CardTitle>Active MilkyWay Stargates</CardTitle>
+          <CardTitle>Registered Users</CardTitle>
         </CardHeader>
         <CardContent>
           <h1
             class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
           >
-            20
-          </h1>
-        </CardContent>
-      </Card>
-      <Card class="flex-1">
-        <CardHeader>
-          <CardTitle>Active Pegasus Stargates</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <h1
-            class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
-          >
-            20
-          </h1>
-        </CardContent>
-      </Card>
-
-      <Card class="flex-1">
-        <CardHeader>
-          <CardTitle>Active Universe Stargates</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <h1
-            class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
-          >
-            20
-          </h1>
-        </CardContent>
-      </Card>
-
-      <Card class="flex-1">
-        <CardHeader>
-          <CardTitle>Active Dawn Stargates</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <h1
-            class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
-          >
-            20
+            {{users?.length ?? "Data didnt load"}}
           </h1>
         </CardContent>
       </Card>
     </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Users Overview</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {{users}}
+      </CardContent>
+      <CardFooter></CardFooter>
+    </Card>    
   </main>
 </template>
