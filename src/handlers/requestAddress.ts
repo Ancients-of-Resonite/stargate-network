@@ -44,6 +44,15 @@ export default async function requestAddress(
       log.error(
         `Failed to create stargate with address ${data.gate_address}${data.gate_code}`,
       );
+    await db.insert(gateLog)
+        .values({
+          type: "CREATE",
+          data: {
+            gate: data.gate_address + data.gate_code + "(Fail)",
+            status: 500,
+            message: "Failed to create gate"
+          }
+        })
       return;
     }
 
