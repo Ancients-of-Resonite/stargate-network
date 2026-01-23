@@ -7,7 +7,7 @@ export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
     <Card className="w-[250px]">
       <CardHeader>
         <CardTitle className="flex items-center gap-1">
-          {gate.is_headless ? <Server size={16} /> : <User size={16} />} {!gate.public_gate && <Lock />}{" "}
+          {gate.is_headless ? <Server size={16} /> : <User size={16} />} {!gate.public_gate && <Lock size={16} />}{" "}
           {gate.session_name}
         </CardTitle>
       </CardHeader>
