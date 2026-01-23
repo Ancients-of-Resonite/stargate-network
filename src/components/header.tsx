@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
-import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { Ellipsis } from "lucide-react";
 import { headers } from "next/headers";
 import Image from "next/image";
+import { LogoutDropdownButton } from "./auth/logout-button";
 import { GlyphSelector } from "./glyph-selector";
 import { Button } from "./ui/button";
 import {
@@ -11,8 +11,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -26,13 +24,14 @@ export async function Header() {
         <p className="text-xl">Ancients of Resonite</p>
       </div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="w-42" asChild>
-          <Button size="icon" variant="ghost">
-            <Ellipsis />
-          </Button>
+        <DropdownMenuTrigger className="w-46" asChild>
+          <div className="flex justify-end">
+            <Button size="icon" variant="ghost">
+              <Ellipsis />
+            </Button>
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuArrow />
           <DropdownMenuGroup>
             {session && <DropdownMenuItem>My Account</DropdownMenuItem>}
             {!session && (
@@ -50,14 +49,7 @@ export async function Header() {
               </DropdownMenuGroup>
             </>
           )}
-          {session && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem variant="destructive">Logout</DropdownMenuItem>
-              </DropdownMenuGroup>
-            </>
-          )}
+          {session && <LogoutDropdownButton />}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
