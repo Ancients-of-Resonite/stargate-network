@@ -1,10 +1,11 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "../ui/button";
-import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
@@ -22,12 +23,16 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    });
   }
 
-  function discordAuth(event: React.MouseEvent<HTMLButtonElement>) {
+  async function discordAuth(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
+    await authClient.signIn.social({ provider: "discord" });
   }
 
   return (
