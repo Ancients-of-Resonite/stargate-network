@@ -15,6 +15,13 @@
       "when": 1768861867660,
       "tag": "0001_whole_lorna_dane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768903177283,
+      "tag": "0002_zippy_sphinx",
+      "breakpoints": true
     }
   ]
 }
