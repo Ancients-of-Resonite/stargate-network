@@ -53,6 +53,8 @@ export const gateLogType = pgEnum('gate_log_type', ['DIALOUT', 'CLOSE', 'DELETE'
 export const gateLog = pgTable("gate_log", {
   id: uuid().primaryKey().unique().defaultRandom(),
   type: gateLogType(),
+  status: integer(),
+  remote: text(), 
   data: json().notNull()
 })
 
