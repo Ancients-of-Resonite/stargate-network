@@ -29,10 +29,11 @@ export default async function Home() {
     if (isAdmin) return true;
     return v.public_gate;
   });
+
   return (
     <div className="font-sans">
       <Header />
-      <main className="p-6 flex flex-wrap gap-4">
+      <main className="p-6 flex flex-wrap gap-4 justify-center">
         {stargates.map(gate => <StargateCard gate={gate} key={gate.gate_address} />)}
       </main>
     </div>
