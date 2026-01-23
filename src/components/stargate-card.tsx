@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from "../components/ui/card";
 
 export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
   return (
-    <Card className="w-[250px]">
+    <Card className="w-[320px]">
       <CardHeader>
         <CardTitle className="flex items-center gap-1">
           {gate.is_headless ? <Server size={16} /> : <User size={16} />} {!gate.public_gate && <Lock size={16} />}{" "}
