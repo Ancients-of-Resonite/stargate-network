@@ -23,11 +23,31 @@ export default async function dialRequest(
   if (session) {
     if (data.gate_address.length < 6) {
       socket.send("CSDialCheck:400");
+        await db.insert(gateLog).values({
+          type: "DIALOUT",
+          remote: session.remote,
+          status: 400,
+          data: {
+            origin_gate: session.gate_address + session.gate_code,
+            end_gate: address + code,
+            message: "Gate address too short"
+          }
+        })
       return;
     }
 
     if (address == session.gate_address) {
       socket.send("CSDialCheck:403");
+        await db.insert(gateLog).values({
+          type: "DIALOUT",
+          remote: session.remote,
+          status: 403,
+          data: {
+            origin_gate: session.gate_address + session.gate_code,
+            end_gate: address + code,
+            message: "Unable to dial same gate"
+          }
+        })
       return;
     }
 
@@ -39,10 +59,11 @@ export default async function dialRequest(
         socket.send("CSDialCheck:404");
         await db.insert(gateLog).values({
           type: "DIALOUT",
+          remote: session.remote,
+          status: 404,
           data: {
             origin_gate: session.gate_address + session.gate_code,
             end_gate: address + code,
-            status: 404,
             message: "Gate not found"
           }
         })
@@ -64,10 +85,11 @@ export default async function dialRequest(
           );
           await db.insert(gateLog).values({
             type: "DIALOUT",
+            remote: session.remote,
+            status: 200,
             data: {
               origin_gate: session.gate_address + session.gate_code,
               end_gate: address + code,
-              status: 200,
               message: "Dialout successful"
             }
           })
@@ -81,10 +103,11 @@ export default async function dialRequest(
           );
           await db.insert(gateLog).values({
             type: "DIALOUT",
+            remote: session.remote,
+            status: 302,
             data: {
               origin_gate: session.gate_address + session.gate_code,
               end_gate: address + code,
-              status: 302,
               message: "Incorrect gate code"
             }
           })
@@ -95,10 +118,11 @@ export default async function dialRequest(
         socket.send("CSDialCheck:302");
         await db.insert(gateLog).values({
           type: "DIALOUT",
+          remote: session.remote,
+          status: 302,
           data: {
             origin_gate: session.gate_address + session.gate_code,
             end_gate: address + code,
-            status: 302,
             message: "Incorrect gate code"
           }
         })
@@ -107,10 +131,11 @@ export default async function dialRequest(
 
       await db.insert(gateLog).values({
         type: "DIALOUT",
+        remote: session.remote,
+        status: 200,
         data: {
           origin_gate: session.gate_address + session.gate_code,
           end_gate: address + code,
-          status: 200,
           message: "Dialout successful"
         }
       })
@@ -124,10 +149,11 @@ export default async function dialRequest(
       );
       await db.insert(gateLog).values({
         type: "DIALOUT",
+        remote: session.remote,
+        status: 500,
         data: {
           origin_gate: session.gate_address + session.gate_code,
           end_gate: address + code,
-          status: 500,
           message: err
         }
       })

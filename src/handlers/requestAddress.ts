@@ -22,17 +22,17 @@ export default async function requestAddress(
 
     try {
       await db.insert(stargate).values({
-          gate_address: data.gate_address,
-          gate_code: data.gate_code,
-          max_users: data.max_users,
-          gate_status: "IDLE",
-          iris_state: false,
-          owner_name: data.host_id,
-          session_name: data.gate_name,
-          session_url: data.session_id,
-          active_users: data.current_users,
-          is_headless: data.is_headless,
-          public_gate: data.public,
+        gate_address: data.gate_address,
+        gate_code: data.gate_code,
+        max_users: data.max_users,
+        gate_status: "IDLE",
+        iris_state: false,
+        owner_name: data.host_id,
+        session_name: data.gate_name,
+        session_url: data.session_id,
+        active_users: data.current_users,
+        is_headless: data.is_headless,
+        public_gate: data.public,
       })
     } catch (err) {
       console.log(err);
@@ -44,12 +44,13 @@ export default async function requestAddress(
       log.error(
         `Failed to create stargate with address ${data.gate_address}${data.gate_code}`,
       );
-    await db.insert(gateLog)
+      await db.insert(gateLog)
         .values({
           type: "CREATE",
+          remote: remote,
+          status: 500,
           data: {
             gate: data.gate_address + data.gate_code + "(Fail)",
-            status: 500,
             message: "Failed to create gate"
           }
         })
@@ -59,12 +60,6 @@ export default async function requestAddress(
     socket.addEventListener("close", async () => {
       const gate = sessions.getSession(remote);
 
-      if (gate) {
-        await db
-            .delete(stargate)
-            .where(eq(stargate.id, gate.id))
-        sessions.removeSession(`${remote}`);
-      }
       return;
     });
 
@@ -84,14 +79,15 @@ export default async function requestAddress(
     });
 
     await db.insert(gateLog)
-        .values({
-          type: "CREATE",
-          data: {
-            gate: gate.gate_address + gate.gate_code,
-            status: 200,
-            message: "Gate created successfully"
-          }
-        })
+      .values({
+        type: "CREATE",
+        status: 200,
+        remote: remote,
+        data: {
+          gate: gate.gate_address + gate.gate_code,
+          message: "Gate created successfully"
+        }
+      })
     socket.send('{code:200,message:"Address accepted"}');
   } else if (eg.session_url == data.session_id) {
     log.info(
@@ -112,26 +108,28 @@ export default async function requestAddress(
       }
     });
     await db.insert(gateLog)
-        .values({
-          type: "CREATE",
-          data: {
-            gate: data.gate_address + data.gate_code,
-            status: 200,
-            message: "Gate already exists with this session url, accepted request"
-          }
-        })
+      .values({
+        type: "CREATE",
+        status: 200,
+        remote: remote,
+        data: {
+          gate: data.gate_address + data.gate_code,
+          message: "Gate already exists with this session url, accepted request"
+        }
+      })
     socket.send('{code:200,message:"Address accepted"}');
     return;
   } else {
     await db.insert(gateLog)
-        .values({
-          type: "CREATE",
-          data: {
-            gate: data.gate_address + data.gate_code,
-            status: 403,
-            message: "Denied request, address already taken"
-          }
-        })
+      .values({
+        type: "CREATE",
+        status: 403,
+        remote: remote,
+        data: {
+          gate: data.gate_address + data.gate_code,
+          message: "Denied request, address already taken"
+        }
+      })
     log.info(
       `Denied request for address ${data.gate_address}${data.gate_code} for client ${cyan(remote)
       }. Address already taken`,

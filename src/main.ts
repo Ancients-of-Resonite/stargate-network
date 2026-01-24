@@ -10,6 +10,8 @@ import { Sessions } from "./types/session";
 import validateRequest from "./handlers/validateAddress";
 import closeWormhole from "./handlers/closeWormhole";
 import updateData from "./handlers/updateData";
+import { gateLog, stargate } from "database/src/schema";
+import { db, eq } from "database/src/db";
 
 const wss = new WebSocketServer({
   port: 8000,
@@ -26,8 +28,25 @@ wss.on("connection", (socket, req) => {
 
   log.info(`A new client has connected: ${green(remote)}`);
 
-  socket.addEventListener("close", (_ev) => {
+  socket.addEventListener("close", async (_ev) => {
+    const session = sessions.getSession(remote);
     log.info(`Client ${red(remote)} has disconnected from the network.`);
+    if (session) {
+      await db
+        .delete(stargate)
+        .where(eq(stargate.id, session.id))
+      await db.insert(gateLog)
+        .values({
+          type: "DELETE",
+          remote: remote,
+          status: 200,
+          data: {
+            gate: session.gate_address + session.gate_code,
+            message: "Client disconnected, removing stargate"
+          }
+        })
+      sessions.removeSession(`${remote}`);
+    }
   });
 
   socket.addEventListener("message", (e) => {
@@ -38,8 +57,7 @@ wss.on("connection", (socket, req) => {
 
       if (!session) return;
       log.info(
-        `Recieved gate relay from ${session.gate_address}${
-          session.gate_code
+        `Recieved gate relay from ${session.gate_address}${session.gate_code
         } (${green(remote)})`
       );
       session.connected_gate.session?.gate_relay(e.data as any);
@@ -55,8 +73,7 @@ wss.on("connection", (socket, req) => {
     switch (data.type) {
       case MessageType.RequestAddress:
         log.info(
-          `Client ${green(remote)} has requested address ${data.gate_address}${
-            data.gate_code
+          `Client ${green(remote)} has requested address ${data.gate_address}${data.gate_code
           }`
         );
         requestAddress(ses_data);

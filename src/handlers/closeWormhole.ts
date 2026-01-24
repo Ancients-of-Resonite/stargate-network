@@ -24,12 +24,12 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
     log.error(`Gate ${session.connected_gate.session?.gate_address} was not found`);
     await db.insert(gateLog).values({
       type: "CLOSE",
+      remote: session.remote,
+      status: 404,
       data: {
         origin_gate: session.gate_address ?? "UNKNOWN",
         end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
-        status: 404,
         message: 'Unable to find connected gate',
-        remote: remote
       }
     })
     return;
@@ -39,12 +39,12 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
     log.error(`Gate ${session.gate_address}${session.gate_code} was not found`);
     await db.insert(gateLog).values({
       type: "CLOSE",
+      remote: session.remote,
+      status: 404,
       data: {
         origin_gate: session.gate_address ?? "UNKNOWN",
         end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
-        status: 404,
         message: 'Unable to find active session stargate',
-        remote: remote
       }
     })
     return;
@@ -52,12 +52,12 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
 
   await db.insert(gateLog).values({
     type: "CLOSE",
+    remote: session.remote,
+    status: 200,
     data: {
       origin_gate: session.gate_address ?? "UNKNOWN",
       end_gate: session.connected_gate.session.gate_address ?? "UNKNOWN",
-      status: 200,
       message: 'Successfully closed gates',
-      remote: remote
     }
   })
   sessions.closeGate(session)
