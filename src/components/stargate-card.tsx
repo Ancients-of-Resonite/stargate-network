@@ -19,7 +19,7 @@ const un_font = localFont({
 });
 
 export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
-  const [glyphs, _] = useLocalStorage("glyph-display-type", "text");
+  const [glyphs, _] = useLocalStorage("glyph-display-type", "text", { initializeWithValue: false });
   return (
     <Card className="w-[320px]">
       <CardHeader>
@@ -28,14 +28,13 @@ export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
           {gate.session_name}
         </CardTitle>
         <CardContent className="mt-2 space-y-2">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>Gate Address</p>
             <p
               className={cn(
-                glyphs === "text" && "font-inter",
                 glyphs === "mw" && `${mw_font.className}`,
                 glyphs === "pg" && `${pg_font.className} text-2xl`,
-                glyphs === "un" && `${un_font.className}`,
+                glyphs === "un" && `${un_font.className} text-3xl`,
                 !gate.public_gate && "blur-sm hover:blur-none transition-all",
               )}
             >
