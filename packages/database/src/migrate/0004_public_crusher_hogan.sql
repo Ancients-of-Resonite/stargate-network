@@ -1,0 +1,1 @@
+ALTER TYPE "public"."gate_log_type" ADD VALUE 'VALIDATE';

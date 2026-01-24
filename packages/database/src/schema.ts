@@ -1,5 +1,6 @@
 import {
   boolean,
+  date,
   integer,
   json,
   pgEnum,
@@ -9,6 +10,7 @@ import {
   primaryKey,
   serial,
   text,
+  timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
@@ -48,14 +50,15 @@ export const stargate = pgTable("stargates", {
   })
 ]);
 
-export const gateLogType = pgEnum('gate_log_type', ['DIALOUT', 'CLOSE', 'DELETE', 'CREATE'])
+export const gateLogType = pgEnum('gate_log_type', ['DIALOUT', 'CLOSE', 'DELETE', 'CREATE', "VALIDATE"])
 
 export const gateLog = pgTable("gate_log", {
   id: uuid().primaryKey().unique().defaultRandom(),
-  type: gateLogType(),
-  status: integer(),
-  remote: text(), 
-  data: json().notNull()
+  type: gateLogType().notNull(),
+  status: integer().notNull(),
+  remote: text().notNull(), 
+  data: json().notNull(),
+  created: timestamp().defaultNow().notNull()
 })
 
 export const bannedIds = pgTable("banned_ids", {
