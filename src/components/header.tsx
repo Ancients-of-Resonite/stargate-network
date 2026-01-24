@@ -45,7 +45,9 @@ export async function Header() {
             <>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>Admin Dashboard</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/admin/dashboard">Admin Dashboard</a>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </>
           )}
