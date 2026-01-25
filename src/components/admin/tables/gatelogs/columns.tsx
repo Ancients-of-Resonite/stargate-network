@@ -8,6 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { gateLog } from "database/src/schema";
@@ -61,20 +62,39 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   {
     accessorKey: "actions",
     cell: ({ row }) => {
-      const log = row.original;
+      const log = row.original as any;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <Sheet>
+          <SheetTrigger asChild>
             <Button variant="ghost">
-              Details
-              <ArrowRight size={16} />
+              Details <ArrowRight size={16} />
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel></DropdownMenuLabel>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SheetTrigger>
+          <SheetContent side="right">
+            <SheetHeader>
+              <SheetTitle>Gate Log</SheetTitle>
+              <SheetDescription></SheetDescription>
+            </SheetHeader>
+            <div className="p-2 space-y-2">
+              <p>
+                Type: <span>{log.type}</span>
+              </p>
+              <p>
+                Status: <span>{log.status}</span>
+              </p>
+              <p>
+                Remote: <span>{log.remtoe}</span>
+              </p>
+              <p>
+                Message: <span>{log.data.message}</span>
+              </p>
+              {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {log.data.gate}</p>}
+              {log.type === "DIALOUT" && <p>Origin Gate: {log.data.origin_gate}</p>}
+              {log.type === "DIALOUT" && <p>End Gate: {log.data.endgate}</p>}
+            </div>
+          </SheetContent>
+        </Sheet>
       );
     },
   },
