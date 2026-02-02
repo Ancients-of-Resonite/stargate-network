@@ -33,8 +33,8 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
       return (
         <Badge
           className={cn(
-            status == 200 && "bg-green-400/50",
-            status == 418 && "bg-green-400/50",
+            status == 200 && "bg-emerald-400/50",
+            status == 418 && "bg-emerald-400/50",
             status == 403 && "bg-amber-500/50",
             status == 302 && "bg-amber-500/50",
             status == 404 && "bg-red-400/50",
