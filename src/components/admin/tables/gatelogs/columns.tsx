@@ -62,7 +62,8 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   {
     accessorKey: "actions",
     cell: ({ row }) => {
-      const log = row.original as any;
+      const log = row.original as typeof gateLog.$inferSelect;
+      const logData = log.data as any;
 
       return (
         <Sheet>
@@ -84,14 +85,14 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
                 Status: <span>{log.status}</span>
               </p>
               <p>
-                Remote: <span>{log.remtoe}</span>
+                Remote: <span>{log.remote}</span>
               </p>
               <p>
-                Message: <span>{log.data.message}</span>
+                Message: <span>{logData.message}</span>
               </p>
-              {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {log.data.gate}</p>}
-              {log.type === "DIALOUT" && <p>Origin Gate: {log.data.origin_gate}</p>}
-              {log.type === "DIALOUT" && <p>End Gate: {log.data.endgate}</p>}
+              {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {logData.gate}</p>}
+              {log.type === "DIALOUT" && <p>Origin Gate: {logData.origin_gate}</p>}
+              {log.type === "DIALOUT" && <p>End Gate: {logData.endgate}</p>}
             </div>
           </SheetContent>
         </Sheet>
