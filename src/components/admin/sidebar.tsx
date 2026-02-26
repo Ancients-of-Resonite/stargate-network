@@ -72,7 +72,7 @@ export async function AdminSidebar() {
               </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                 <SidebarMenuButton asChild>
-                  <a href="/admin/bannedusers">
+                  <a href="/admin/banned">
                     <ShieldBan size={18} /> Banned Users
                   </a>
                 </SidebarMenuButton>
