@@ -61,6 +61,7 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   },
   {
     accessorKey: "actions",
+    header: "",
     cell: ({ row }) => {
       const log = row.original as typeof gateLog.$inferSelect;
       const logData = log.data as any;
