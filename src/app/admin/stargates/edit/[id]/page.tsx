@@ -1,0 +1,42 @@
+import GateEditForm from "@/components/admin/tables/stargate/edit-form";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { Label } from "@/components/ui/label";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { db } from "database/src/db";
+import { stargate } from "database/src/schema";
+
+export default async function EditGate({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const gate = (await db.selectDistinct().from(stargate)).find(g => g.id == id);
+
+  if (!gate) return <div>no gate</div>;
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardContent className="flex justify-between items-center">
+          <div className="flex gap-2 items-center">
+            <SidebarTrigger />
+            <Kbd>/admin/stargates/edit/{id}</Kbd>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Editing{" "}
+            <KbdGroup>
+              <Kbd className="text-white">{gate?.gate_address}</Kbd>
+              <Kbd className="text-primary">{gate?.gate_code}</Kbd>
+            </KbdGroup>
+          </CardTitle>
+        </CardHeader>
+        <GateEditForm gate={gate} />
+      </Card>
+    </div>
+  );
+}
