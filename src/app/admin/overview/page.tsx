@@ -2,7 +2,8 @@ import { DataTable } from "@/components/admin/tables/data-table";
 import { columns as stargate_col } from "@/components/admin/tables/stargate/columns";
 import { columns as user_col } from "@/components/admin/tables/users/columns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useReactTable } from "@tanstack/react-table";
+import { Kbd } from "@/components/ui/kbd";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { user } from "database/src/auth-schema";
 import { db } from "database/src/db";
 import { stargate } from "database/src/schema";
@@ -13,6 +14,14 @@ export default async function AdminDashboard() {
 
   return (
     <main className="space-y-4">
+      <Card>
+        <CardContent className="flex justify-between items-center">
+          <div className="flex gap-2 items-center">
+            <SidebarTrigger />
+            <Kbd>/admin/overview</Kbd>
+          </div>
+        </CardContent>
+      </Card>
       <div className="flex gap-4">
         <Card className="flex-1">
           <CardHeader>

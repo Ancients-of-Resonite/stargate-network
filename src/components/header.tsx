@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { Ellipsis } from "lucide-react";
 import { headers } from "next/headers";
 import Image from "next/image";
+import { useWindowSize } from "usehooks-ts";
 import { LogoutDropdownButton } from "./auth/logout-button";
 import { GlyphSelector } from "./glyph-selector";
 import { Button } from "./ui/button";
@@ -46,7 +47,7 @@ export async function Header() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <a href="/admin/dashboard">Admin Dashboard</a>
+                  <a href="/admin/overview">Admin Dashboard</a>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </>

@@ -30,7 +30,7 @@ export async function AdminSidebar() {
             <SidebarMenuSub>
               <SidebarMenuSubItem>
                 <SidebarMenuButton asChild>
-                  <a href="/admin/dashboard">
+                  <a href="/admin/overview">
                     <LucideLayoutDashboard size={18} /> Overview
                   </a>
                 </SidebarMenuButton>
