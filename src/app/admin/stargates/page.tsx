@@ -22,6 +22,26 @@ export default async function AdminStargates() {
       <div className="flex gap-4 flex-wrap">
         <Card className="flex-1 min-w-52">
           <CardHeader>
+            <CardTitle>Total Gates</CardTitle>
+          </CardHeader>
+          <CardContent>{stargates.length}</CardContent>
+        </Card>
+        <Card className="flex-1 min-w-52">
+          <CardHeader>
+            <CardTitle>Public Gates</CardTitle>
+          </CardHeader>
+          <CardContent>{stargates.filter(v => v.public_gate).length}</CardContent>
+        </Card>
+        <Card className="flex-1 min-w-52">
+          <CardHeader>
+            <CardTitle>Private Gates</CardTitle>
+          </CardHeader>
+          <CardContent>{stargates.filter(v => !v.public_gate).length}</CardContent>
+        </Card>
+      </div>
+      <div className="flex gap-4 flex-wrap">
+        <Card className="flex-1 min-w-52">
+          <CardHeader>
             <CardTitle>MilkyWay Stargates</CardTitle>
           </CardHeader>
           <CardContent>{stargates.filter(v => v.gate_code === "M@").length}</CardContent>
@@ -43,26 +63,6 @@ export default async function AdminStargates() {
             <CardTitle>Dawn Stargates</CardTitle>
           </CardHeader>
           <CardContent>{stargates.filter(v => v.gate_code === "R@").length}</CardContent>
-        </Card>
-      </div>
-      <div className="flex gap-4 flex-wrap">
-        <Card className="flex-1 min-w-52">
-          <CardHeader>
-            <CardTitle>Total Gates</CardTitle>
-          </CardHeader>
-          <CardContent>{stargates.length}</CardContent>
-        </Card>
-        <Card className="flex-1 min-w-52">
-          <CardHeader>
-            <CardTitle>Public Gates</CardTitle>
-          </CardHeader>
-          <CardContent>{stargates.filter(v => v.public_gate).length}</CardContent>
-        </Card>
-        <Card className="flex-1 min-w-52">
-          <CardHeader>
-            <CardTitle>Private Gates</CardTitle>
-          </CardHeader>
-          <CardContent>{stargates.filter(v => !v.public_gate).length}</CardContent>
         </Card>
       </div>
       <Card>
