@@ -5,14 +5,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { stargate } from "database/src/schema";
 import { MoreHorizontal } from "lucide-react";
-import GateEditDialog from "./edit-dialog";
 
 export const columns: ColumnDef<typeof stargate.$inferSelect>[] = [
   {
@@ -44,7 +41,8 @@ export const columns: ColumnDef<typeof stargate.$inferSelect>[] = [
     header: "Max Users",
   },
   {
-    accessorKey: "Actions",
+    accessorKey: "actions",
+    header: "",
     cell: ({ row }) => {
       const gate = row.original;
 
@@ -52,14 +50,13 @@ export const columns: ColumnDef<typeof stargate.$inferSelect>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="ghost">
-              <MoreHorizontal size={16} />
+              <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <GateEditDialog gate={gate} />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href={`/admin/stargates/edit/${gate.id}`}>Edit Gate</a>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
