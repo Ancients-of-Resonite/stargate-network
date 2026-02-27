@@ -16,7 +16,7 @@ export default async function BannedPage() {
         <CardContent className="flex justify-between items-center">
           <div className="flex gap-2 items-center">
             <SidebarTrigger />
-            <Kbd>/admin/overview</Kbd>
+            <Kbd>/admin/banned</Kbd>
           </div>
         </CardContent>
       </Card>
