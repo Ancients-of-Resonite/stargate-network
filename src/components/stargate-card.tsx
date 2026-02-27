@@ -20,6 +20,8 @@ const un_font = localFont({
 
 export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
   const [glyphs, _] = useLocalStorage("glyph-display-type", "text", { initializeWithValue: false });
+  const [blurHidden, set] = useLocalStorage("blue-hidden-gates", false, { initializeWithValue: false });
+
   return (
     <Card className="w-[320px]">
       <CardHeader>
@@ -35,7 +37,7 @@ export function StargateCard({ gate }: { gate: typeof stargate.$inferInsert }) {
                 glyphs === "mw" && `${mw_font.className}`,
                 glyphs === "pg" && `${pg_font.className} text-2xl`,
                 glyphs === "un" && `${un_font.className} text-3xl`,
-                !gate.public_gate && "blur-sm hover:blur-none transition-all",
+                !gate.public_gate && blurHidden && "blur-sm hover:blur-none transition-all",
               )}
             >
               {gate.gate_address}
