@@ -44,7 +44,7 @@ export const columns: ColumnDef<typeof user.$inferSelect>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <a href={`/admin/users/edit/${gate.id}`}>Edit Gate</a>
+              <a href={`/admin/users/edit/${gate.id}`}>Edit User</a>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
