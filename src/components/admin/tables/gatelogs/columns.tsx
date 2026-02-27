@@ -26,7 +26,7 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => <p className="w-16">Status</p>,
     cell: (({ row }) => {
       const status = row.getValue("status") as number;
 
@@ -53,50 +53,66 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   },
   {
     accessorKey: "created",
-    header: "Created",
+    header: () => <p className="text-right">Created</p>,
     cell: ({ row }) => {
       const date = row.getValue("created") as Date;
-      return <Time date={date} />;
+
+      return (
+        <div className="text-right">
+          <time dateTime={date.toISOString()}>
+            {date.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </time>
+        </div>
+      );
     },
   },
   {
     accessorKey: "actions",
-    header: "",
+    header: () => <div className="w-8 text-right" />,
     cell: ({ row }) => {
       const log = row.original as typeof gateLog.$inferSelect;
       const logData = log.data as any;
 
       return (
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost">
-              Details <ArrowRight size={16} />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right">
-            <SheetHeader>
-              <SheetTitle>Gate Log</SheetTitle>
-              <SheetDescription></SheetDescription>
-            </SheetHeader>
-            <div className="p-2 space-y-2">
-              <p>
-                Type: <span>{log.type}</span>
-              </p>
-              <p>
-                Status: <span>{log.status}</span>
-              </p>
-              <p>
-                Remote: <span>{log.remote}</span>
-              </p>
-              <p>
-                Message: <span>{logData.message}</span>
-              </p>
-              {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {logData.gate}</p>}
-              {log.type === "DIALOUT" && <p>Origin Gate: {logData.origin_gate}</p>}
-              {log.type === "DIALOUT" && <p>End Gate: {logData.endgate}</p>}
-            </div>
-          </SheetContent>
-        </Sheet>
+        <div className="w-8 text-right">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost">
+                Details <ArrowRight size={16} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Gate Log</SheetTitle>
+                <SheetDescription></SheetDescription>
+              </SheetHeader>
+              <div className="p-2 space-y-2">
+                <p>
+                  Type: <span>{log.type}</span>
+                </p>
+                <p>
+                  Status: <span>{log.status}</span>
+                </p>
+                <p>
+                  Remote: <span>{log.remote}</span>
+                </p>
+                <p>
+                  Message: <span>{logData.message}</span>
+                </p>
+                {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {logData.gate}</p>}
+                {log.type === "DIALOUT" && <p>Origin Gate: {logData.origin_gate}</p>}
+                {log.type === "DIALOUT" && <p>End Gate: {logData.endgate}</p>}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       );
     },
   },
