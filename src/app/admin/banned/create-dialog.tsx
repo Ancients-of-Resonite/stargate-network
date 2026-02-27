@@ -17,7 +17,6 @@ import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import * as z from "zod";
 import createBan from "./create";
 
@@ -34,18 +33,16 @@ export default function CreateDialog() {
       user_id: "",
     },
   });
-  const [open, setOpen] = useState<boolean>(false);
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     createBan(data);
     form.reset();
-    setOpen(false);
   }
 
   return (
-    <Dialog open={open} modal={false}>
+    <Dialog modal>
       <DialogTrigger asChild>
-        <Button variant="destructive" onClick={() => setOpen(!open)}>Ban New User</Button>
+        <Button variant="destructive">Ban New User</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -81,7 +78,9 @@ export default function CreateDialog() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="addform" variant="destructive">Ban User</Button>
+          <DialogClose asChild>
+            <Button type="submit" form="addform" variant="destructive">Ban User</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
