@@ -9,11 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { bannedIds } from "database/src/schema";
 import { Controller, useForm } from "react-hook-form";
 
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";

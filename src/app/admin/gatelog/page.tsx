@@ -3,7 +3,6 @@ import { columns } from "@/components/admin/tables/gatelogs/columns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Kbd } from "@/components/ui/kbd";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { main } from "bun";
 import { db } from "database/src/db";
 import { gateLog } from "database/src/schema";
 

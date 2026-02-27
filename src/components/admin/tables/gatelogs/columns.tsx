@@ -16,8 +16,6 @@ import { ArrowRight, MoreHorizontal } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-const Time = dynamic(() => import("./time"), { ssr: false });
-
 export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
   {
     accessorKey: "type",
