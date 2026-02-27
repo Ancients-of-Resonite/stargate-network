@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { StargateCard } from "@/components/stargate-card";
+import Stars from "@/components/stars";
 import { auth } from "@/lib/auth";
 import { db } from "database/src/db";
 import { stargate } from "database/src/schema";
@@ -36,6 +37,7 @@ export default async function Home() {
       <main className="p-6 flex flex-wrap gap-4 justify-center">
         {stargates.map(gate => <StargateCard gate={gate} key={gate.gate_address} />)}
       </main>
+      <Stars />
     </div>
   );
 }
