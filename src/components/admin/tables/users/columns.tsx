@@ -42,7 +42,7 @@ export const columns: ColumnDef<typeof user.$inferSelect>[] = [
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <a href={`/admin/users/edit/${gate.id}`}>Edit Gate</a>
             </DropdownMenuItem>

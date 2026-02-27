@@ -53,7 +53,7 @@ export const columns: ColumnDef<typeof stargate.$inferSelect>[] = [
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <a href={`/admin/stargates/edit/${gate.id}`}>Edit Gate</a>
             </DropdownMenuItem>
