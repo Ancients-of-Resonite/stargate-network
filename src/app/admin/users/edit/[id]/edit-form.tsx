@@ -21,7 +21,7 @@ import editUser from "./edit";
 export const formSchema = z.object({
   username: z.string(),
   email: z.string(),
-  tags: z.array(z.string()),
+  tags: z.array(z.object({ tag: z.string() })),
 });
 
 export default function UserEditForm({ user }: { user: typeof usr.$inferSelect }) {
@@ -31,7 +31,11 @@ export default function UserEditForm({ user }: { user: typeof usr.$inferSelect }
     defaultValues: {
       username: user.name,
       email: user.email,
-      tags: user.tags,
+      tags: user.tags.map(t => {
+        return {
+          tag: t,
+        };
+      }),
     },
   });
 
@@ -80,6 +84,7 @@ export default function UserEditForm({ user }: { user: typeof usr.$inferSelect }
                               aria-invalid={fieldState.invalid}
                               placeholder="user"
                               type="text"
+                              value={field.tag}
                             />
                             <Button
                               variant="ghost"
@@ -97,7 +102,9 @@ export default function UserEditForm({ user }: { user: typeof usr.$inferSelect }
                     )}
                   />
                 ))}
-                <Button className="w-full" type="button" variant="secondary" onClick={() => append("")}>Add Tag</Button>
+                <Button className="w-full" type="button" variant="secondary" onClick={() => append({ tag: "" })}>
+                  Add Tag
+                </Button>
               </CardContent>
             </Card>
           </FieldGroup>
