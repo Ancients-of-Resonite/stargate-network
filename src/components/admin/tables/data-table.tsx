@@ -26,7 +26,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="overflow-hidden rounded-md border">
+      <div suppressHydrationWarning className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
