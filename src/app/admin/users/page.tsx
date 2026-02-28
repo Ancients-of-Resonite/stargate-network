@@ -22,10 +22,10 @@ export default async function UsersAdminPage() {
         <CardHeader>
           <CardTitle>User Overview</CardTitle>
           <CardDescription>Shows every created user</CardDescription>
-          <CardContent className="mt-4">
-            <DataTable columns={columns} data={users.slice(0, 5)} />
-          </CardContent>
         </CardHeader>
+        <CardContent className="mt-4">
+          <DataTable columns={columns} data={users.slice(0, 5)} />
+        </CardContent>
       </Card>
     </main>
   );
