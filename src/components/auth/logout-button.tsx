@@ -4,8 +4,8 @@ import { Button } from "../ui/button";
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator } from "../ui/dropdown-menu";
 
 export function LogoutDropdownButton() {
-  function logout() {
-    authClient.signOut();
+  async function logout() {
+    await authClient.signOut();
     window.location.reload();
   }
   return (
