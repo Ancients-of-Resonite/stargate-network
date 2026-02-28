@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Controller, useForm } from "react-hook-form";
 
+import { CardAction } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,12 +36,15 @@ export default function CreateDialog() {
   function onSubmit(data: z.infer<typeof formSchema>) {
     createBan(data);
     form.reset();
+    window.location.reload();
   }
 
   return (
-    <Dialog modal>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">Ban New User</Button>
+        <CardAction suppressHydrationWarning>
+          <Button variant="destructive">Ban A User</Button>
+        </CardAction>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
