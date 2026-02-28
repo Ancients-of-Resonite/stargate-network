@@ -52,7 +52,13 @@ export const columns: ColumnDef<typeof bannedIds.$inferSelect>[] = [
       const user = row.original;
 
       return (
-        <Dialog>
+        <Dialog
+          onOpenChange={(o) => {
+            console.log(o);
+            if (o) return;
+            window.location.reload();
+          }}
+        >
           <DialogTrigger>
             <Button variant="destructive">
               <Trash2Icon />
