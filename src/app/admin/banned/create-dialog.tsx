@@ -16,34 +16,33 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import * as z from "zod";
 import createBan from "./create";
 
 export const formSchema = z.object({
-  user_id: z.string({ error: "You must input a User ID" }),
-  reason: z.string({ error: "You must input a reason" }),
+  user_id: z.string({ error: "You must input a User ID" }).min(2),
+  reason: z.string({ error: "You must input a reason" }).min(3, { error: "Must be longer than 2 characters" }),
 });
 
 export default function CreateDialog() {
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      reason: "",
-      user_id: "",
-    },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     createBan(data);
     form.reset();
+    setOpen(false);
     window.location.reload();
   }
 
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
         <CardAction suppressHydrationWarning>
-          <Button variant="destructive">Ban A User</Button>
+          <Button variant="destructive" onClick={() => setOpen(true)}>Ban A User</Button>
         </CardAction>
       </DialogTrigger>
       <DialogContent>
@@ -78,11 +77,9 @@ export default function CreateDialog() {
         </form>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="submit" form="addform" variant="destructive">Ban User</Button>
-          </DialogClose>
+          <Button type="submit" form="addform" variant="destructive">Ban User</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
