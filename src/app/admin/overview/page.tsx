@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
           <CardTitle>Stargate Overview</CardTitle>
           <CardDescription>Shows the 5 most recently updated stargates</CardDescription>
           <CardContent className="mt-4">
-            <DataTable columns={stargate_col} data={stargates.slice(0, 5)} />
+            <DataTable columns={stargate_col} data={stargates.slice(0, 5)} hidePagination />
           </CardContent>
         </CardHeader>
       </Card>
@@ -50,7 +50,7 @@ export default async function AdminDashboard() {
           <CardTitle>User Overview</CardTitle>
           <CardDescription>Shows the 5 most recently created users</CardDescription>
           <CardContent className="mt-4">
-            <DataTable columns={user_col} data={users.slice(0, 5)} />
+            <DataTable columns={user_col} data={users.slice(0, 5)} hidePagination />
           </CardContent>
         </CardHeader>
       </Card>
