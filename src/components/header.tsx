@@ -34,7 +34,11 @@ export async function Header() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuGroup>
-            {session && <DropdownMenuItem>My Account</DropdownMenuItem>}
+            {session && (
+              <DropdownMenuItem asChild>
+                <a href="/account">My Account</a>
+              </DropdownMenuItem>
+            )}
             {!session && (
               <DropdownMenuItem asChild>
                 <a href="/auth">Login</a>
