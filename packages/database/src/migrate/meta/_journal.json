@@ -50,6 +50,13 @@
       "when": 1769214776898,
       "tag": "0006_talented_nocturne",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1772314574900,
+      "tag": "0007_superb_purple_man",
+      "breakpoints": true
     }
   ]
 }
