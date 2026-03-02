@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import * as schema from "./schema.ts";
-import * as authSchema from "./auth-schema.ts";
+import * as schema from "./schema";
+import * as authSchema from "./auth-schema";
 import pg from "pg";
 
 export { eq } from "drizzle-orm"
