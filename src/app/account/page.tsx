@@ -9,10 +9,13 @@ import { headers } from "next/headers";
 import { columns } from "@/components/admin/tables/apikeys/columns";
 import { DataTable } from "@/components/admin/tables/data-table";
 import { Button } from "@/components/ui/button";
+import { ApiKey } from "better-auth/plugins";
+import CreateDialog from "../admin/banned/create-dialog";
+import CreateKey from "./create-key";
 import AccountEditForm from "./edit-form";
 
 export default async function AccountPage() {
-  const keys = await auth.api.listApiKeys({
+  let keys = await auth.api.listApiKeys({
     headers: await headers(),
   });
   return (
@@ -51,7 +54,7 @@ export default async function AccountPage() {
           <DataTable columns={columns} data={keys} />
         </CardContent>
         <CardFooter>
-          <Button form="account-edit">Generate API Key</Button>
+          <CreateKey />
         </CardFooter>
       </Card>
     </main>
