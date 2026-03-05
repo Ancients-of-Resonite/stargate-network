@@ -1,9 +1,6 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { useEffect, useState } from "react";
-
-import { user as usr } from "database/src/auth-schema";
 
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -51,7 +48,7 @@ export default function AccountEditForm() {
                 <FieldLabel htmlFor="username">Username</FieldLabel>
                 <FieldDescription>The public display name you go by</FieldDescription>
               </FieldContent>
-              <Input id="username" defaultValue={field.value} aria-invalid={fieldState.invalid} />
+              <Input {...field} id="username" defaultValue={session?.user.name} aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -65,7 +62,7 @@ export default function AccountEditForm() {
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <FieldDescription>The email you use to login</FieldDescription>
               </FieldContent>
-              <Input id="username" defaultValue={field.value} aria-invalid={fieldState.invalid} />
+              <Input {...field} id="username" defaultValue={session?.user.email} aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
