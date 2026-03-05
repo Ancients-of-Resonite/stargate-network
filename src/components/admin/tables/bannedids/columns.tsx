@@ -54,7 +54,6 @@ export const columns: ColumnDef<typeof bannedIds.$inferSelect>[] = [
       return (
         <Dialog
           onOpenChange={(o) => {
-            console.log(o);
             if (o) return;
             window.location.reload();
           }}

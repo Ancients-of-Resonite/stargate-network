@@ -10,5 +10,4 @@ export default async function createBan(data: z.infer<typeof formSchema>) {
     user_id: data.user_id,
     reason: data.reason
   })
-  console.log(data)
 }
