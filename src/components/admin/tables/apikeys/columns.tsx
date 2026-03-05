@@ -1,44 +1,73 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { reload } from "@/lib/actions";
+import { authClient } from "@/lib/auth-client";
 import { ColumnDef } from "@tanstack/react-table";
-import { apikey, user } from "database/src/auth-schema";
-import { MoreHorizontal, Trash2Icon } from "lucide-react";
+import { apikey } from "database/src/auth-schema";
+import { Trash2Icon } from "lucide-react";
+import { useState } from "react";
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorKey: "id",
-    header: "Username",
-  },
-  {
     accessorKey: "name",
-    header: "Email",
-  },
-  {
-    accessorKey: "prefix",
-    header: "Prefix",
-  },
-  {
-    accessorKey: "expiresAt",
-    header: "Expiry Date",
+    header: "Name",
   },
   {
     accessorKey: "actions",
     header: "",
     cell: ({ row }) => {
-      const gate = row.original;
+      const key = row.original;
+
+      const [open, setOpen] = useState(false);
+      const [loading, setLoad] = useState(false);
 
       return (
-        <Button size="icon" variant="destructive">
-          <Trash2Icon />
-        </Button>
+        <AlertDialog open={open} onOpenChange={setOpen}>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="icon">
+              <Trash2Icon />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this API key?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                variant="destructive"
+                disabled={loading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setLoad(true);
+                  authClient.apiKey.delete({ keyId: key.id }).finally(() => {
+                    setOpen(false);
+                    reload("/account");
+                  });
+                }}
+              >
+                Yes, delete key
+                {loading && <Spinner />}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       );
     },
   },
