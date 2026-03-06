@@ -15,8 +15,10 @@ import { CardAction } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { reload } from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { toast } from "sonner";
 import * as z from "zod";
 import createBan from "./create";
 
@@ -32,17 +34,19 @@ export default function CreateDialog() {
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    createBan(data);
-    form.reset();
-    setOpen(false);
-    window.location.reload();
+    createBan(data).then(() => {
+      toast.success("Banned user");
+      reload("/admin/banned");
+      setOpen(false);
+      form.reset();
+    });
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <CardAction suppressHydrationWarning>
-          <Button variant="destructive" onClick={() => setOpen(true)}>Ban A User</Button>
+          <Button variant="destructive">Ban A User</Button>
         </CardAction>
       </DialogTrigger>
       <DialogContent>
@@ -77,7 +81,7 @@ export default function CreateDialog() {
         </form>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button type="submit" form="addform" variant="destructive">Ban User</Button>
         </DialogFooter>
