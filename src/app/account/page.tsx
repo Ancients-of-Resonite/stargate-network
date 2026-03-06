@@ -36,12 +36,7 @@ export default async function AccountPage() {
             Change some of your account settings here :3
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <AccountEditForm />
-        </CardContent>
-        <CardFooter>
-          <Button form="account-edit">Save</Button>
-        </CardFooter>
+        <AccountEditForm />
       </Card>
       <Card>
         <CardHeader>
