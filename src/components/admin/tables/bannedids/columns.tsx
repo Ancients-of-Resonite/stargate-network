@@ -1,17 +1,5 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,18 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
+import { Spinner } from "@/components/ui/spinner";
+import { reload } from "@/lib/actions";
 import { ColumnDef } from "@tanstack/react-table";
 import { bannedIds } from "database/src/schema";
-import { MoreHorizontal, Trash, Trash2Icon } from "lucide-react";
-import { refresh } from "next/cache";
-import { useRouter } from "next/router";
+import { Trash2Icon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { unban } from "./unban";
 
 export const columns: ColumnDef<typeof bannedIds.$inferSelect>[] = [
@@ -51,12 +34,13 @@ export const columns: ColumnDef<typeof bannedIds.$inferSelect>[] = [
     cell: ({ row, table }) => {
       const user = row.original;
 
+      const [open, setOpen] = useState(false);
+      const [loading, setLoading] = useState(false);
+
       return (
         <Dialog
-          onOpenChange={(o) => {
-            if (o) return;
-            window.location.reload();
-          }}
+          open={open}
+          onOpenChange={setOpen}
         >
           <DialogTrigger>
             <Button variant="destructive">
@@ -72,16 +56,23 @@ export const columns: ColumnDef<typeof bannedIds.$inferSelect>[] = [
               <DialogClose asChild>
                 <Button variant="secondary">Cancel</Button>
               </DialogClose>
-              <DialogClose asChild>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    unban(user);
-                  }}
-                >
-                  Yes, unban
-                </Button>
-              </DialogClose>
+              <Button
+                disabled={loading}
+                variant="destructive"
+                onClick={() => {
+                  setLoading(true);
+                  unban(user).then(() => {
+                    setOpen(false);
+                    reload("/admin/banned");
+                    toast.success("Unbanned user");
+                  }).catch(() => {
+                    toast.error("Failed to unban");
+                  });
+                }}
+              >
+                Yes, unban
+                {loading && <Spinner />}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
