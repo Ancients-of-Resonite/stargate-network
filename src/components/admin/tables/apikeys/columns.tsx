@@ -16,7 +16,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { reload } from "@/lib/actions";
 import { authClient } from "@/lib/auth-client";
 import { ColumnDef } from "@tanstack/react-table";
-import { apikey } from "database/src/auth-schema";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
@@ -57,8 +56,9 @@ export const columns: ColumnDef<any>[] = [
                   e.preventDefault();
                   setLoad(true);
                   authClient.apiKey.delete({ keyId: key.id }).finally(() => {
-                    setOpen(false);
                     reload("/account");
+                    setOpen(false);
+                    setLoad(false);
                   });
                 }}
               >
