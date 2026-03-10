@@ -7,7 +7,9 @@ import {apiKey} from "better-auth/plugins"
 export const auth = betterAuth({
   plugins: [
     nextCookies(),
-    apiKey()
+    apiKey({
+      enableSessionForAPIKeys: true
+    })
   ],
   emailAndPassword: {
     enabled: true,
