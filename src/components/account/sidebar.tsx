@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { ChevronUp, Home, User2, UserCogIcon } from "lucide-react";
+import { ChevronUp, Home, User2, UserCogIcon, UserKeyIcon } from "lucide-react";
 import { headers } from "next/headers";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import {
@@ -36,6 +36,15 @@ export async function UserSidebar() {
                 <SidebarMenuButton asChild>
                   <a href="/account">
                     <UserCogIcon size={18} /> Profile
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuSubItem>
+            </SidebarMenuSub>
+            <SidebarMenuSub>
+              <SidebarMenuSubItem>
+                <SidebarMenuButton asChild>
+                  <a href="/account/apikeys">
+                    <UserKeyIcon size={18} /> API Keys
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuSubItem>
