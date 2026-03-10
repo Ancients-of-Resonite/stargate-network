@@ -13,6 +13,7 @@ import { ApiKey } from "better-auth/plugins";
 import CreateDialog from "../admin/banned/create-dialog";
 import CreateKey from "./create-key";
 import AccountEditForm from "./edit-form";
+import LocalSettings from "./localsettings";
 
 export default async function AccountPage() {
   let keys = await auth.api.listApiKeys({
@@ -38,6 +39,19 @@ export default async function AccountPage() {
         </CardHeader>
         <AccountEditForm />
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Local Browser Settings</CardTitle>
+          <CardDescription>
+            Some funny lil local browser settings :3
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LocalSettings />
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>API Keys</CardTitle>
