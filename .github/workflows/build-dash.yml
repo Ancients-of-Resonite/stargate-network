@@ -51,7 +51,7 @@ jobs:
           push: true
           tags: |
             sgn-dash:${{ inputs.version }}
-            sgn-dash:$env.NOW
+            sgn-dash:$NOW
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
