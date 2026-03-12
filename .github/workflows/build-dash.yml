@@ -51,8 +51,8 @@ jobs:
           file: ./Dockerfile.dash
           push: true
           tags: |
-            ${{github.repository_owner}}/sgn-dash:${{ inputs.version }}
-            ${{github.repository_owner}}/sgn-dash:${{ env.NOW }}
+            ${{ env.REGISTRY }}/${{github.repository_owner}}/sgn-dash:${{ inputs.version }}
+            ${{ env.REGISTRY }}/${{github.repository_owner}}/sgn-dash:${{ env.NOW }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
