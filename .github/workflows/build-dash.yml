@@ -6,6 +6,12 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{github.repository}}
 
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+  attestations: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
