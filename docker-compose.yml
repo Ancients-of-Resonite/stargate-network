@@ -2,9 +2,7 @@ services:
   sgn-dash:
     env_file:
       - ./.env
-    build:
-      context: .
-      dockerfile: ./Dockerfile.dash
+    image: ghcr.io/ancients-of-resonite/sgn-dash:latest
     ports:
       - "3000:3000"
     depends_on:
@@ -15,9 +13,7 @@ services:
       - ./.env
     environment:
       DB_URL: postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}
-    build:
-      context: .
-      dockerfile: ./Dockerfile.server
+    image: ghcr.io/ancients-of-resonite/sgn-server:latest
     healthcheck:
       test: ["CMD-SHELL", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
@@ -26,7 +22,6 @@ services:
       start_period: 10s
     ports:
       - "8000:8000"
-      - "3000:3000"
     depends_on:
       database:
         condition: service_healthy
