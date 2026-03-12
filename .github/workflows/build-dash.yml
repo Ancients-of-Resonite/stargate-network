@@ -43,6 +43,9 @@ jobs:
         id: date
         run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
+      - name: print tags
+        run: echo ${{ steps.meta.outputs.tags }}
+
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
