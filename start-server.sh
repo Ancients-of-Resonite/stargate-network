@@ -5,5 +5,5 @@ if bun run db:migrate | grep -q 'migrations applied successfully!'; then
 
     cd ../../apps/sgn-socket
 
-    bun run src/main.ts
+    bun run build/main.js
 fi

@@ -10,6 +10,8 @@ COPY . .
 
 RUN bun install
 
+RUN bun run ./build.ts
+
 EXPOSE 8000
 
 CMD ["./start-server.sh"]
