@@ -1,5 +1,9 @@
 FROM oven/bun
 
+RUN apt-get update
+
+RUN apt-get install curl
+
 WORKDIR /app-sgn_server
 
 COPY . .
