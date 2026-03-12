@@ -1,24 +1,11 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
-import { FormField } from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Kbd } from "@/components/ui/kbd";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
-import { columns } from "@/components/admin/tables/apikeys/columns";
-import { DataTable } from "@/components/admin/tables/data-table";
-import { Button } from "@/components/ui/button";
-import { ApiKey } from "better-auth/plugins";
-import CreateDialog from "../admin/banned/create-dialog";
-import CreateKey from "./create-key";
 import AccountEditForm from "./edit-form";
 import LocalSettings from "./localsettings";
 
 export default async function AccountPage() {
-  let keys = await auth.api.listApiKeys({
-    headers: await headers(),
-  });
   return (
     <main className="space-y-4">
       <Card>
