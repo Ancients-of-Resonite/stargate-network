@@ -1,0 +1,11 @@
+FROM oven/bun
+
+WORKDIR /app-sgn_server
+
+COPY . .
+
+RUN bun install
+
+EXPOSE 8000
+
+CMD ["./start-server.sh"]
