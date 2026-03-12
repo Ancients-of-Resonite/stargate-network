@@ -4,15 +4,17 @@ RUN apt-get update
 
 RUN apt-get install curl -y
 
-WORKDIR /app-sgn_server
+WORKDIR /app
 
 COPY . .
 
 RUN bun install
 
-WORKDIR /app-sgn_server/apps/sgn-socket
+WORKDIR /app/apps/sgn-socket
 
 RUN bun run ./build.ts
+
+WORKDIR /app
 
 EXPOSE 8000
 
