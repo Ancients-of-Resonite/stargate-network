@@ -51,7 +51,7 @@ jobs:
           file: ./Dockerfile.dash
           push: true
           tags: |
-            ${{ steps.meta.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NOW }}
           labels: ${{ steps.meta.outputs.labels }}
