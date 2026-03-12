@@ -11,6 +11,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{github.repository_owner}}/sgn-dash
+  NOW: placeholder
 
 permissions:
   contents: read
@@ -51,7 +52,7 @@ jobs:
           push: true
           tags: |
             sgn-dash:${{ inputs.version }}
-            sgn-dash:$NOW
+            sgn-dash:${{ env.NOW }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
