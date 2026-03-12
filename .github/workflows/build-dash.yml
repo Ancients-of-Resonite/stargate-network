@@ -50,7 +50,7 @@ jobs:
           context: .
           file: ./Dockerfile.dash
           push: true
-          tags: ${{ steps.meta.outputs.tags }},${{env.NOW}}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
