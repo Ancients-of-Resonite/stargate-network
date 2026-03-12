@@ -41,7 +41,7 @@ jobs:
 
       - name: Get Date
         id: date
-        run: echo "NOW=$(date +'$Y-%m-%d')" >> $GITHUB_ENV
+        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         id: push
