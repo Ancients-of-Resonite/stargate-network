@@ -21,6 +21,13 @@ export const sessions = new Sessions();
 
 wss.on("listening", () => {
   log.info("WebSocket server is listening on port 8000");
+
+  Bun.serve({
+    port: 3000,
+    routes: {
+      "/health": new Response("healthy") 
+    }
+  })
 });
 
 wss.on("connection", (socket, req) => {
