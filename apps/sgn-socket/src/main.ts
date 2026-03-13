@@ -95,7 +95,7 @@ wss.on("connection", (socket, req) => {
         log.info(
           `Client ${remote} has requested to validate address ${cyan(
             data.gate_address
-          )}${magenta(data.gate_code)}`
+          )}`
         );
         validateRequest(ses_data);
         break;
