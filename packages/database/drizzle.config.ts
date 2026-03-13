@@ -15,6 +15,6 @@ export default defineConfig({
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     ssl: false,
-    url: process.env.DB_URL!,
+    url: `postgresql://${Bun.env.DB_USER}:${Bun.env.DB_PASS}@${Bun.env.DB_HOST}:${Bun.env.DB_PORT ?? 5432}/${Bun.env.DB_DATABASE}`,
   },
 });
