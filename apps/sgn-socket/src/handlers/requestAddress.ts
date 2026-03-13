@@ -57,12 +57,6 @@ export default async function requestAddress(
       return;
     }
 
-    socket.addEventListener("close", async () => {
-      const gate = sessions.getSession(remote);
-
-      return;
-    });
-
     sessions.pushSession({
       id: gate.id,
       gate_address: data.gate_address,
