@@ -41,6 +41,9 @@ wss.on("connection", (socket, req) => {
     const session = sessions.getSession(remote);
     log.info(`Client ${red(remote)} has disconnected from the network.`);
     if (session) {
+      if (session.connected_gate.session) {
+        session.connected_gate.session.send_impulse("CloseWormhole")
+      }
       await db
         .delete(stargate)
         .where(eq(stargate.id, session.id))
