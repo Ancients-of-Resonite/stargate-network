@@ -79,7 +79,7 @@ export default async function validateRequest(
 
       if (data.gate_address.length > 6) {
 
-        if (gate.status != "IDLE"){
+        if (gate.gate_status != "IDLE"){
           socket.send("CSValidCheck:403");
           log.info(
             `Address validation from ${cyan(session.gate_address) + magenta(session.gate_code)

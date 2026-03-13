@@ -78,7 +78,7 @@ export default async function dialRequest(
 
       if (data.gate_address.length > 6) {
 
-        if (gate.status != "IDLE"){
+        if (gate.gate_status != "IDLE"){
           socket.send("CSDialCheck:403");
           log.info(
             `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
