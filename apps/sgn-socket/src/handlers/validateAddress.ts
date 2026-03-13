@@ -15,8 +15,15 @@ export default async function validateRequest(
   },
 ) {
   const address = data.gate_address.slice(0, 6);
-  const code = data.gate_address.slice(6, 8);
+  // const code = data.gate_address.slice(6, 8);
   const session = sessions.getSession(remote);
+  
+  var sourceTypeCode = "";
+  if (session) {
+    var sourceTypeCode = session.gate_code;
+  }
+  const dialedTypeCode = data.gate_address.slice(6, 8);
+  const code = dialedTypeCode + sourceTypeCode.slice(dialedTypeCode.length,2);
 
   if (session) {
     if (data.gate_address.length < 6) {
@@ -71,7 +78,48 @@ export default async function validateRequest(
       }
 
       if (data.gate_address.length > 6) {
-        if (gate.gate_code.startsWith(code)) {
+
+        if (gate.status != "IDLE"){
+          socket.send("CSValidCheck:403");
+          log.info(
+            `Address validation from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } for ${cyan(gate.gate_address) + magenta(gate.gate_code)
+            } failed with code ${red("403")}.`,
+          );
+          await db.insert(gateLog)
+            .values({
+              type: "VALIDATE",
+              status: 403,
+              remote: remote,
+              data: {
+                gate: address + code,
+                message: "Validation check failed, target gate busy"
+              }
+            })
+          return;
+        }
+
+        if (gate.active_users >= gate.max_users){
+          socket.send("CSValidCheck:403");
+          log.info(
+            `Address validation from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } for ${cyan(gate.gate_address) + magenta(gate.gate_code)
+            } failed with code ${red("403")}.`,
+          );
+          await db.insert(gateLog)
+            .values({
+              type: "VALIDATE",
+              status: 403,
+              remote: remote,
+              data: {
+                gate: address + code,
+                message: "Validation check failed, user limit reached"
+              }
+            })
+          return;
+        }
+
+        if (gate.gate_code == code) {
           log.info(
             `Address validation from ${cyan(session.gate_address) + magenta(session.gate_code)
             } for ${cyan(gate.gate_address) + magenta(gate.gate_code)

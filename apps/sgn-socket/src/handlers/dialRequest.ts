@@ -15,8 +15,14 @@ export default async function dialRequest(
   },
 ) {
   const address = data.gate_address.slice(0, 6);
-  const code = data.gate_address.slice(6, 8);
   const session = sessions.getSession(remote);
+
+  var sourceTypeCode = "";
+  if (session) {
+    var sourceTypeCode = session.gate_code;
+  }
+  const dialedTypeCode = data.gate_address.slice(6, 8);
+  const code = dialedTypeCode + sourceTypeCode.slice(dialedTypeCode.length,2);
 
   if (session?.connected_gate.session) return;
 
@@ -71,7 +77,48 @@ export default async function dialRequest(
       }
 
       if (data.gate_address.length > 6) {
-        if (gate.gate_code.startsWith(code)) {
+
+        if (gate.status != "IDLE"){
+          socket.send("CSDialCheck:403");
+          log.info(
+            `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } to ${cyan(gate.gate_address) + magenta(gate.gate_code)
+            } failed with code ${red("403")}.`,
+          );
+          await db.insert(gateLog).values({
+            type: "DIALOUT",
+            remote: session.remote,
+            status: 403,
+            data: {
+              origin_gate: session.gate_address + session.gate_code,
+              end_gate: address + code,
+              message: "Gate Busy"
+            }
+          })
+          return;
+        }
+
+        if (gate.active_users >= gate.max_users){
+          socket.send("CSDialCheck:403");
+          log.info(
+            `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
+            } to ${cyan(gate.gate_address) + magenta(gate.gate_code)
+            } failed with code ${red("403")}.`,
+          );
+          await db.insert(gateLog).values({
+            type: "DIALOUT",
+            remote: session.remote,
+            status: 403,
+            data: {
+              origin_gate: session.gate_address + session.gate_code,
+              end_gate: address + code,
+              message: "User Limit Reached"
+            }
+          })
+          return;
+        }
+
+        if (gate.gate_code == code) {
           socket.send("CSDialCheck:200");
           socket.send(`CSDialedSessionURL:${gate.session_url}`);
           sessions.updateSession({
