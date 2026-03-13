@@ -81,6 +81,8 @@ wss.on("connection", (socket, req) => {
     };
     switch (data.type) {
       case MessageType.RequestAddress:
+        let temp = sessions.getSession(remote)
+        if (temp) return
         log.info(
           `Client ${green(remote)} has requested address ${data.gate_address}${data.gate_code
           }`
