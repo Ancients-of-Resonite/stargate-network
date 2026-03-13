@@ -40,9 +40,10 @@ services:
     volumes:
       - sgn-data:/var/lib/postgresql/data # Persistent storage for the database
     ports:
-      - "${PUBLIC_DB_PORT:-5432}:${DB_PORT:-5432}"
+      - "${DB_PORT:-5432}:${DB_PORT:-5432}"
+    command: -p ${DB_PORT:-5432}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE} -p ${DB_PORT:-5432}"]
       interval: 5s
       timeout: 5s
       retries: 5
