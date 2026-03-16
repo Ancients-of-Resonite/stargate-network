@@ -5,6 +5,7 @@ import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const apikey = request.headers.get("x-api-key") ?? request.nextUrl.searchParams.get("apikey")
+  const format = request.nextUrl.searchParams.get("format")
   const session = await auth.api.getSession({
     headers: new Headers({
       "x-api-key": apikey ?? ""
@@ -30,6 +31,16 @@ export async function GET(request: NextRequest) {
     if (isAdmin) return true;
     return v.public_gate;
   });
+
+  if (format === "resonite") {
+    let gates: string = "";
+
+    stargates.map((g, i) => {
+      gates = `${gates}${g.gate_address},${g.gate_code},${g.gate_status},${g.owner_name},${g.session_name},${g.active_users},${g.max_users},${g.is_headless},${g.public_gate},${g.owner_name}${i === stargates.length - 1 ? "" : "\n"}`
+    })
+
+    return new Response(gates)
+  }
 
   return Response.json([...stargates])
 }
