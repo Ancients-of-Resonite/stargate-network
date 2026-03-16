@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     let gates: string = "";
 
     stargates.map((g, i) => {
-      gates = `${gates}${g.gate_address},${g.gate_code},${g.gate_status},${g.owner_name},${g.session_name},${g.active_users},${g.max_users},${g.is_headless},${g.public_gate},${g.owner_name}${i === stargates.length - 1 ? "" : "\n"}`
+      gates = `${gates}${g.gate_address},${g.gate_code},${g.gate_status},${g.owner_name},${g.session_name},${g.active_users},${g.max_users},${g.is_headless},${g.public_gate}${i === stargates.length - 1 ? "" : "\n"}`
     })
 
     return new Response(gates)
