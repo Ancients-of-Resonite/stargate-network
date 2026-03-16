@@ -8,7 +8,11 @@ export const auth = betterAuth({
   plugins: [
     nextCookies(),
     apiKey({
-      enableSessionForAPIKeys: true
+      enableSessionForAPIKeys: true,
+      rateLimit: {
+        enabled: true,
+        maxRequests: 5000
+      }
     })
   ],
   emailAndPassword: {
