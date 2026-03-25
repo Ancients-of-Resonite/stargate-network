@@ -4,7 +4,7 @@ import { log } from "@/utils/log";
 
 import { MessageType } from "@/types/messageTypes";
 import dialRequest from "@/handlers/dialRequest";
-import { cyan, green, magenta, red } from "@std/fmt/colors";
+import { cyan, green, red } from "@std/fmt/colors";
 import requestAddress from "@/handlers/requestAddress";
 import { Sessions } from "./types/session";
 import validateRequest from "./handlers/validateAddress";
