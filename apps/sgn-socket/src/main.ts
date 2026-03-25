@@ -33,7 +33,8 @@ wss.on("listening", () => {
 });
 
 wss.on("connection", (socket, req) => {
-  const remote = req.socket.remoteAddress + ":" + req.socket.remotePort;
+  const forwardedFor = req.headers["x-forwarded-for"]
+  const remote = (forwardedFor ?? req.socket.remoteAddress) + ":" + req.socket.remotePort;
 
   log.info(`A new client has connected: ${green(remote)}`);
 
