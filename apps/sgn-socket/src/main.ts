@@ -27,7 +27,7 @@ wss.on("listening", () => {
     routes: {
       "/health": Response.json({
         status: 'healthy'
-      }) 
+      })
     }
   })
 });
