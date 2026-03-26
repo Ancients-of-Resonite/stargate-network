@@ -98,10 +98,10 @@ wss.on("connection", (socket, req) => {
 
       if (!session) return;
       log.info(
-        `Recieved gate relay from ${session.gate_address}${session.gate_code
+        `Recieved IDC from ${session.gate_address}${session.gate_code
         } (${green(remote)})`
       );
-      session.connected_gate.session?.gate_relay(e.data as any);
+      session.connected_gate.session?.gate_relay(e.data.toString());
       return;
     }
 
