@@ -25,7 +25,7 @@ export const gateEvents = new EventEmitter<any>()
 wss.on("listening", () => {
   log.info("WebSocket server is listening on port 8000");
 
-  const prune = new Cron("*/1 * * * *", async () => {
+  const prune = new Cron("*/5 * * * *", async () => {
     const mintime = 60000
     let slist = sessions.getSessions()
     let dblist = await db.select().from(stargate)
