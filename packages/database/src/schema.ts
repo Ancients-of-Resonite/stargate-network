@@ -36,6 +36,7 @@ export const stargate = pgTable("stargates", {
   is_headless: boolean().notNull(),
   iris_state: boolean().notNull(),
   gate_status: text(),
+  last_keep_alive: timestamp({ mode: "date" }).defaultNow()
 }, (t) => [
   pgPolicy('admin', {
     as: "permissive",
@@ -56,7 +57,7 @@ export const gateLog = pgTable("gate_log", {
   id: uuid().primaryKey().unique().defaultRandom(),
   type: gateLogType().notNull(),
   status: integer().notNull(),
-  remote: text().notNull(), 
+  remote: text().notNull(),
   data: json().notNull(),
   created: timestamp().defaultNow().notNull()
 })

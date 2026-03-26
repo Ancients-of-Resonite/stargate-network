@@ -1,0 +1,1 @@
+ALTER TABLE "stargates" ADD COLUMN "last_keep_alive" date DEFAULT now();

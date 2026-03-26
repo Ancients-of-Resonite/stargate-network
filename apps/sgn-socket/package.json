@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@std/fmt": "npm:@jsr/std__fmt@^1.0.8",
+    "croner": "^10.0.1",
     "database": "workspace:*",
     "drizzle-orm": "^0.44.5",
     "pg": "^8.16.3",

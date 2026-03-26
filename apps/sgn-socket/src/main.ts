@@ -4,7 +4,7 @@ import { log } from "@/utils/log";
 
 import { MessageType } from "@/types/messageTypes";
 import dialRequest from "@/handlers/dialRequest";
-import { cyan, green, magenta, red } from "@std/fmt/colors";
+import { cyan, green, red } from "@std/fmt/colors";
 import requestAddress from "@/handlers/requestAddress";
 import { Sessions } from "./types/session";
 import validateRequest from "./handlers/validateAddress";
@@ -12,6 +12,7 @@ import closeWormhole from "./handlers/closeWormhole";
 import updateData from "./handlers/updateData";
 import { gateLog, stargate } from "database/src/schema";
 import { db, eq } from "database/src/db";
+import { Cron } from "croner";
 
 const wss = new WebSocketServer({
   port: 8000,
@@ -22,18 +23,44 @@ export const sessions = new Sessions();
 wss.on("listening", () => {
   log.info("WebSocket server is listening on port 8000");
 
+  const prune = new Cron("*/1 * * * *", async () => {
+    const mintime = 60000
+    let slist = sessions.getSessions()
+    let dblist = await db.select().from(stargate)
+
+    let currentDate = new Date()
+
+    dblist.forEach(async (g) => {
+      let timeDifference = currentDate.getTime() - g.last_keep_alive!.getTime()
+
+      if (timeDifference > mintime) {
+        log.info(`Removing stale stargate ${g.gate_address}${g.gate_code}`)
+        await db.delete(stargate).where(eq(stargate.id, g.id))
+      }
+    })
+
+    slist.forEach(async (s) => {
+      let timeDifference = currentDate.getTime() - s.lastKeepAlive.getTime()
+      if (timeDifference > mintime) {
+        log.info(`Removing stale session ${s.remote}`)
+        sessions.removeSession(s.remote)
+      }
+    })
+  })
+
   Bun.serve({
     port: 3000,
     routes: {
       "/health": Response.json({
         status: 'healthy'
-      }) 
+      })
     }
   })
 });
 
 wss.on("connection", (socket, req) => {
-  const remote = req.socket.remoteAddress + ":" + req.socket.remotePort;
+  const forwardedFor = req.headers["x-forwarded-for"]
+  const remote = (forwardedFor ?? req.socket.remoteAddress) + ":" + req.socket.remotePort;
 
   log.info(`A new client has connected: ${green(remote)}`);
 
@@ -113,6 +140,7 @@ wss.on("connection", (socket, req) => {
       case MessageType.UpdateIris:
         break;
       case MessageType.KeepAlive:
+        sessions.sessionKeepAlive(remote)
         break;
       default:
         socket.send("this type is not a thing");
