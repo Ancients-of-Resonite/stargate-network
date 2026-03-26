@@ -52,11 +52,12 @@ export class Sessions {
   }
 
   public async sessionKeepAlive(remote: string) {
-    const session = this.sessions.findIndex(v => v.remote == remote)
-    this.sessions[session].lastKeepAlive = new Date()
+    const index = this.sessions.findIndex(v => v.remote == remote)
+    if (!this.sessions[index]) return
+    this.sessions[index].lastKeepAlive = new Date()
     await db.update(stargate)
       .set({ last_keep_alive: new Date() })
-      .where(eq(stargate.gate_address, this.sessions[session].gate_address))
+      .where(eq(stargate.gate_address, this.sessions[index].gate_address))
   }
 
   public dialSession(origin: Session, dialed_address: string) {
