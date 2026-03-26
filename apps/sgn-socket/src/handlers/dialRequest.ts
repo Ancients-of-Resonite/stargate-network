@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { DialRequest } from "@/types/messageTypes";
 
-import { sessions } from "../main";
+import { gateEvents, sessions } from "../main";
 import { log } from "../utils/log";
 import { cyan, magenta, red } from "@std/fmt/colors";
 import { db, eq } from "database/src/db";
@@ -22,38 +22,38 @@ export default async function dialRequest(
     var sourceTypeCode = session.gate_code;
   }
   const dialedTypeCode = data.gate_address.slice(6, 8);
-  const code = dialedTypeCode + sourceTypeCode.slice(dialedTypeCode.length,2);
+  const code = dialedTypeCode + sourceTypeCode.slice(dialedTypeCode.length, 2);
 
   if (session?.connected_gate.session) return;
 
   if (session) {
     if (data.gate_address.length < 6) {
       socket.send("CSDialCheck:400");
-        await db.insert(gateLog).values({
-          type: "DIALOUT",
-          remote: session.remote,
-          status: 400,
-          data: {
-            origin_gate: session.gate_address + session.gate_code,
-            end_gate: address + code,
-            message: "Gate address too short"
-          }
-        })
+      await db.insert(gateLog).values({
+        type: "DIALOUT",
+        remote: session.remote,
+        status: 400,
+        data: {
+          origin_gate: session.gate_address + session.gate_code,
+          end_gate: address + code,
+          message: "Gate address too short"
+        }
+      })
       return;
     }
 
     if (address == session.gate_address) {
       socket.send("CSDialCheck:403");
-        await db.insert(gateLog).values({
-          type: "DIALOUT",
-          remote: session.remote,
-          status: 403,
-          data: {
-            origin_gate: session.gate_address + session.gate_code,
-            end_gate: address + code,
-            message: "Unable to dial same gate"
-          }
-        })
+      await db.insert(gateLog).values({
+        type: "DIALOUT",
+        remote: session.remote,
+        status: 403,
+        data: {
+          origin_gate: session.gate_address + session.gate_code,
+          end_gate: address + code,
+          message: "Unable to dial same gate"
+        }
+      })
       return;
     }
 
@@ -78,7 +78,7 @@ export default async function dialRequest(
 
       if (data.gate_address.length > 6) {
 
-        if (gate.gate_status != "IDLE"){
+        if (gate.gate_status != "IDLE") {
           socket.send("CSDialCheck:403");
           log.info(
             `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
@@ -98,7 +98,7 @@ export default async function dialRequest(
           return;
         }
 
-        if (gate.active_users >= gate.max_users){
+        if (gate.active_users >= gate.max_users) {
           socket.send("CSDialCheck:403");
           log.info(
             `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)
@@ -124,6 +124,11 @@ export default async function dialRequest(
           sessions.updateSession({
             remote: remote,
           });
+
+          gateEvents.on(`irisUpdate:${gate.gate_address}`, (state) => {
+            socket.send(`IrisUpdate:${state}`)
+          })
+
           sessions.dialSession(session, data.gate_address)
           log.info(
             `Dialout from ${cyan(session.gate_address) + magenta(session.gate_code)

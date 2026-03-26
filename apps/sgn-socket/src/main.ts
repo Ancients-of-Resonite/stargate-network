@@ -13,12 +13,14 @@ import updateData from "./handlers/updateData";
 import { gateLog, stargate } from "database/src/schema";
 import { db, eq } from "database/src/db";
 import { Cron } from "croner";
+import { EventEmitter } from "./types/events";
 
 const wss = new WebSocketServer({
   port: 8000,
 });
 
 export const sessions = new Sessions();
+export const gateEvents = new EventEmitter<any>()
 
 wss.on("listening", () => {
   log.info("WebSocket server is listening on port 8000");
@@ -138,6 +140,8 @@ wss.on("connection", (socket, req) => {
         updateData(data, remote);
         break;
       case MessageType.UpdateIris:
+        let _s = sessions.getSession(remote)
+        gateEvents.emit(`irisUpdate:${_s?.gate_address}`, data.iris_state)
         break;
       case MessageType.KeepAlive:
         sessions.sessionKeepAlive(remote)
