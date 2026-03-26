@@ -33,6 +33,7 @@ export default async function requestAddress(
         active_users: data.current_users,
         is_headless: data.is_headless,
         public_gate: data.public,
+        last_keep_alive: new Date(),
       })
     } catch (err) {
       console.log(err);
@@ -69,7 +70,8 @@ export default async function requestAddress(
       },
       gate_relay: (relay) => {
         socket.send(relay)
-      }
+      },
+      lastKeepAlive: new Date()
     });
 
     await db.insert(gateLog)
@@ -99,7 +101,8 @@ export default async function requestAddress(
       },
       gate_relay: (relay) => {
         socket.send(relay)
-      }
+      },
+      lastKeepAlive: new Date()
     });
     await db.insert(gateLog)
       .values({

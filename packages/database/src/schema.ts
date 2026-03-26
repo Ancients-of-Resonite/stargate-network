@@ -36,6 +36,7 @@ export const stargate = pgTable("stargates", {
   is_headless: boolean().notNull(),
   iris_state: boolean().notNull(),
   gate_status: text(),
+  last_keep_alive: timestamp({ mode: "date" }).defaultNow()
 }, (t) => [
   pgPolicy('admin', {
     as: "permissive",

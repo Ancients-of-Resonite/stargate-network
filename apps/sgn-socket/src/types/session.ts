@@ -1,3 +1,7 @@
+import { log } from "@/utils/log";
+import { db, eq } from "database/src/db";
+import { stargate } from "database/src/schema";
+
 export type Session = {
   id: string;
   gate_address: string;
@@ -10,6 +14,7 @@ export type Session = {
   connected_gate: {
     session?: Session;
   };
+  lastKeepAlive: Date;
 }
 
 export type updateSession = {
@@ -44,6 +49,14 @@ export class Sessions {
     const oldses = this.sessions.filter((v) => v.remote != remote);
 
     this.sessions = oldses;
+  }
+
+  public async sessionKeepAlive(remote: string) {
+    const session = this.sessions.findIndex(v => v.remote == remote)
+    this.sessions[session].lastKeepAlive = new Date()
+    await db.update(stargate)
+      .set({ last_keep_alive: new Date() })
+      .where(eq(stargate.gate_address, this.sessions[session].gate_address))
   }
 
   public dialSession(origin: Session, dialed_address: string) {
