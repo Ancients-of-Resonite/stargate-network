@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import { sessions } from "../main";
+import { gateEvents, sessions } from "../main";
 import { DialRequest } from "../types/messageTypes";
 import { db } from "database/src/db";
 import { gateLog, stargate } from "database/src/schema";
@@ -49,6 +49,8 @@ export default async function closeWormhole(socket: WebSocket, remote: string) {
     })
     return;
   }
+
+  gateEvents.off(`irisUpdate:${session.connected_gate.session.gate_address}`, session.gate_address)
 
   await db.insert(gateLog).values({
     type: "CLOSE",

@@ -13,17 +13,19 @@ import updateData from "./handlers/updateData";
 import { gateLog, stargate } from "database/src/schema";
 import { db, eq } from "database/src/db";
 import { Cron } from "croner";
+import { EventEmitter } from "./types/events";
 
 const wss = new WebSocketServer({
   port: 8000,
 });
 
 export const sessions = new Sessions();
+export const gateEvents = new EventEmitter<any>()
 
 wss.on("listening", () => {
   log.info("WebSocket server is listening on port 8000");
 
-  const prune = new Cron("*/1 * * * *", async () => {
+  const prune = new Cron("*/5 * * * *", async () => {
     const mintime = 60000
     let slist = sessions.getSessions()
     let dblist = await db.select().from(stargate)
@@ -96,10 +98,10 @@ wss.on("connection", (socket, req) => {
 
       if (!session) return;
       log.info(
-        `Recieved gate relay from ${session.gate_address}${session.gate_code
+        `Recieved IDC from ${session.gate_address}${session.gate_code
         } (${green(remote)})`
       );
-      session.connected_gate.session?.gate_relay(e.data as any);
+      session.connected_gate.session?.gate_relay(e.data.toString());
       return;
     }
 
@@ -138,6 +140,8 @@ wss.on("connection", (socket, req) => {
         updateData(data, remote);
         break;
       case MessageType.UpdateIris:
+        let _s = sessions.getSession(remote)
+        gateEvents.emit(`irisUpdate:${_s?.gate_address}`, data.iris_state)
         break;
       case MessageType.KeepAlive:
         sessions.sessionKeepAlive(remote)
