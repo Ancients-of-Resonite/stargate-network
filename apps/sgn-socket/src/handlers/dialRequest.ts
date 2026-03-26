@@ -125,7 +125,7 @@ export default async function dialRequest(
             remote: remote,
           });
 
-          gateEvents.on(`irisUpdate:${gate.gate_address}`, (state) => {
+          gateEvents.on(`irisUpdate:${gate.gate_address}`, session.gate_address, (state) => {
             socket.send(`IrisUpdate:${state}`)
           })
 
@@ -191,6 +191,11 @@ export default async function dialRequest(
           message: "Dialout successful"
         }
       })
+
+      gateEvents.on(`irisUpdate:${gate.gate_address}`, session.gate_address, (state) => {
+        socket.send(`IrisUpdate:${state}`)
+      })
+
       socket.send("CSDialCheck:200");
       socket.send(`CSDialedSessionURL:${gate.session_url}`);
       sessions.dialSession(session, data.gate_address)
