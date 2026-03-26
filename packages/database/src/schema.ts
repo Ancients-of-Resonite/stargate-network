@@ -56,7 +56,7 @@ export const gateLog = pgTable("gate_log", {
   id: uuid().primaryKey().unique().defaultRandom(),
   type: gateLogType().notNull(),
   status: integer().notNull(),
-  remote: text().notNull(), 
+  remote: text().notNull(),
   data: json().notNull(),
   created: timestamp().defaultNow().notNull()
 })
