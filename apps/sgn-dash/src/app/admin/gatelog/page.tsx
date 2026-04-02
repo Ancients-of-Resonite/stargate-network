@@ -7,7 +7,7 @@ import { db } from "database/src/db";
 import { gateLog } from "database/src/schema";
 
 export default async function AdminGateLogs() {
-  const logs = await db.select().from(gateLog);
+  const logs = (await db.select().from(gateLog)).sort((a, b) => b.created!.getTime() - a.created!.getTime());
   return (
     <main className="space-y-4">
       <Card>
