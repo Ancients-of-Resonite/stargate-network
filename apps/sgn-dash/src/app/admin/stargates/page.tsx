@@ -7,7 +7,7 @@ import { db } from "database/src/db";
 import { stargate } from "database/src/schema";
 
 export default async function AdminStargates() {
-  const stargates = await db.select().from(stargate);
+  const stargates = (await db.select().from(stargate)).sort((a, b) => b.created!.getTime() - a.created!.getTime());
 
   return (
     <main className="space-y-4">

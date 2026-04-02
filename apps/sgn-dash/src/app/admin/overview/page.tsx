@@ -9,7 +9,7 @@ import { db } from "database/src/db";
 import { stargate } from "database/src/schema";
 
 export default async function AdminDashboard() {
-  const stargates = await db.select().from(stargate);
+  const stargates = (await db.select().from(stargate)).sort((a, b) => b.created!.getTime() - a.created!.getTime());
   const users = await db.select().from(user);
 
   return (

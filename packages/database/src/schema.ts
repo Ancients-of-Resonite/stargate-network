@@ -36,7 +36,8 @@ export const stargate = pgTable("stargates", {
   is_headless: boolean().notNull(),
   iris_state: boolean().notNull(),
   gate_status: text(),
-  last_keep_alive: timestamp({ mode: "date" }).defaultNow()
+  last_keep_alive: timestamp({ mode: "date" }).defaultNow(),
+  created: timestamp({ mode: "date" }).defaultNow()
 }, (t) => [
   pgPolicy('admin', {
     as: "permissive",
@@ -59,11 +60,12 @@ export const gateLog = pgTable("gate_log", {
   status: integer().notNull(),
   remote: text().notNull(),
   data: json().notNull(),
-  created: timestamp().defaultNow().notNull()
+  created: timestamp({ mode: "date" }).defaultNow().notNull()
 })
 
 export const bannedIds = pgTable("banned_ids", {
   id: serial().primaryKey().notNull(),
   user_id: text().notNull(),
   reason: text().notNull(),
+  created: timestamp({ mode: "date" }).defaultNow()
 });

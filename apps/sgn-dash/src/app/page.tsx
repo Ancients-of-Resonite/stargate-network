@@ -26,10 +26,11 @@ export default async function Home() {
     public_gate: stargate.public_gate,
     is_headless: stargate.is_headless,
     iris_state: stargate.iris_state,
+    created: stargate.created,
   }).from(stargate)).filter(v => {
     if (isAdmin) return true;
     return v.public_gate;
-  });
+  }).sort((a, b) => b.created!.getTime() - a.created!.getTime());
 
   return (
     <div className="font-sans">
