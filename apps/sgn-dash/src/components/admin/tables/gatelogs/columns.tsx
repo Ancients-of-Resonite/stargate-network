@@ -106,7 +106,7 @@ export const columns: ColumnDef<typeof gateLog.$inferSelect>[] = [
                 </p>
                 {log.type === "CREATE" || log.type == "VALIDATE" && <p>Gate: {logData.gate}</p>}
                 {log.type === "DIALOUT" && <p>Origin Gate: {logData.origin_gate}</p>}
-                {log.type === "DIALOUT" && <p>End Gate: {logData.endgate}</p>}
+                {log.type === "DIALOUT" && <p>End Gate: {logData.end_gate}</p>}
               </div>
             </SheetContent>
           </Sheet>
