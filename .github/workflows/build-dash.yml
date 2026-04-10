@@ -2,11 +2,6 @@ name: Build SGN Dash
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        type: string
-        description: Version of this build
-        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -52,7 +47,6 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NOW }}
           labels: ${{ steps.meta.outputs.labels }}
 
