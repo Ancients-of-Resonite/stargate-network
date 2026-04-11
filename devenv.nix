@@ -36,6 +36,7 @@
       exec = # bash
         ''
           exec bun --bun install
+          exec bun --bun db:generate
           exec bun --bun db:migrate
         '';
       cwd = "./packages/database";
