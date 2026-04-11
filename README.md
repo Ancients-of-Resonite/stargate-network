@@ -3,10 +3,9 @@ The full backend server including the dashboard
 
 ## Development
 **Requirements**
-- (Bun)[https://bun.sh]
-
+- [Bun](https://bun.sh)
 *Recommended*
-- (Devenv)[https://devenv.sh]
+- [Devenv](https://devenv.sh)
   - This lets you quickly spin up a dev environment
 
 ### Setup
