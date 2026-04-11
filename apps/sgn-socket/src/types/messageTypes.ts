@@ -14,6 +14,7 @@ export interface RequestAddress {
   current_users: number;
   max_users: number;
   public: boolean;
+  gate_color: string;
   gate_name: string;
 }
 

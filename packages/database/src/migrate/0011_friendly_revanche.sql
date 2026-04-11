@@ -1,0 +1,1 @@
+ALTER TABLE "stargates" ADD COLUMN "gate_color" text;
