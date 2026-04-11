@@ -2,11 +2,6 @@ name: Build SGN Server
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        type: string
-        description: Version of this build
-        required: true
 
 env:
   REGISTRY: ghcr.io
