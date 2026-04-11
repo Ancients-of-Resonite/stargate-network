@@ -11,6 +11,7 @@ export interface Stargate {
   is_headless: boolean;
   iris_state: boolean;
   gate_status: "IDLE" | "INCOMING7" | "INCOMING8" | "INCOMING9" | "OPEN";
+  gate_color: string;
   created: Date;
   updated: Date;
 }

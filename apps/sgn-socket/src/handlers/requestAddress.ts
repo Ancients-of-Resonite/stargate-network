@@ -33,6 +33,7 @@ export default async function requestAddress(
         active_users: data.current_users,
         is_headless: data.is_headless,
         public_gate: data.public,
+        gate_color: data.gate_color,
         last_keep_alive: new Date(),
       })
     } catch (err) {
