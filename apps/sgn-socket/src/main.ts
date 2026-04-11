@@ -51,7 +51,7 @@ wss.on("listening", () => {
   })
 
   Bun.serve({
-    port: 3000,
+    port: 3100,
     routes: {
       "/health": Response.json({
         status: 'healthy'
