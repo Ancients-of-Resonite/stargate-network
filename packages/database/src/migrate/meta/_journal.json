@@ -85,6 +85,13 @@
       "when": 1775947732336,
       "tag": "0011_friendly_revanche",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1776096429491,
+      "tag": "0012_publication",
+      "breakpoints": true
     }
   ]
 }

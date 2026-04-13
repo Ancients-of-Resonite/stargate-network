@@ -23,37 +23,47 @@ export const admin = pgRole("admin", {
 
 export const user = pgRole("user");
 
-export const stargate = pgTable("stargates", {
-  id: uuid().primaryKey().unique().defaultRandom().notNull(),
-  gate_address: text().notNull(),
-  gate_code: text().notNull(),
-  owner_name: text().notNull(),
-  session_url: text().notNull(),
-  session_name: text().notNull(),
-  active_users: integer().notNull(),
-  max_users: integer().notNull(),
-  public_gate: boolean().notNull(),
-  is_headless: boolean().notNull(),
-  iris_state: boolean().notNull(),
-  gate_status: text(),
-  gate_color: text(),
-  last_keep_alive: timestamp({ mode: "date" }).defaultNow(),
-  created: timestamp({ mode: "date" }).defaultNow()
-}, (t) => [
-  pgPolicy('admin', {
-    as: "permissive",
-    to: admin,
-    for: "delete",
-  }),
-  pgPolicy("public_read", {
-    as: "permissive",
-    to: "public",
-    for: "select",
-    using: sql`${t.public_gate} = false`
-  })
-]);
+export const stargate = pgTable(
+  "stargates",
+  {
+    id: uuid().primaryKey().unique().defaultRandom().notNull(),
+    gate_address: text().notNull(),
+    gate_code: text().notNull(),
+    owner_name: text().notNull(),
+    session_url: text().notNull(),
+    session_name: text().notNull(),
+    active_users: integer().notNull(),
+    max_users: integer().notNull(),
+    public_gate: boolean().notNull(),
+    is_headless: boolean().notNull(),
+    iris_state: boolean().notNull(),
+    gate_status: text(),
+    gate_color: text(),
+    last_keep_alive: timestamp({ mode: "date" }).defaultNow(),
+    created: timestamp({ mode: "date" }).defaultNow(),
+  },
+  (t) => [
+    pgPolicy("admin", {
+      as: "permissive",
+      to: admin,
+      for: "delete",
+    }),
+    pgPolicy("public_read", {
+      as: "permissive",
+      to: "public",
+      for: "select",
+      using: sql`${t.public_gate} = false`,
+    }),
+  ],
+);
 
-export const gateLogType = pgEnum('gate_log_type', ['DIALOUT', 'CLOSE', 'DELETE', 'CREATE', "VALIDATE"])
+export const gateLogType = pgEnum("gate_log_type", [
+  "DIALOUT",
+  "CLOSE",
+  "DELETE",
+  "CREATE",
+  "VALIDATE",
+]);
 
 export const gateLog = pgTable("gate_log", {
   id: uuid().primaryKey().unique().defaultRandom(),
@@ -61,12 +71,12 @@ export const gateLog = pgTable("gate_log", {
   status: integer().notNull(),
   remote: text().notNull(),
   data: json().notNull(),
-  created: timestamp({ mode: "date" }).defaultNow().notNull()
-})
+  created: timestamp({ mode: "date" }).defaultNow().notNull(),
+});
 
 export const bannedIds = pgTable("banned_ids", {
   id: serial().primaryKey().notNull(),
   user_id: text().notNull(),
   reason: text().notNull(),
-  created: timestamp({ mode: "date" }).defaultNow()
+  created: timestamp({ mode: "date" }).defaultNow(),
 });
