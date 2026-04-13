@@ -51,6 +51,9 @@
     enable = true;
     listen_addresses = "*";
     port = config.env.DB_PORT;
+    settings = {
+      wal_level = "logical";
+    };
     initialDatabases = [
       {
         name = config.env.DB_DATABASE;
