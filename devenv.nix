@@ -7,7 +7,6 @@
 }:
 
 {
-  process.manager.implementation = "process-compose";
   env = {
     DB_HOST = "127.0.0.1";
     # DB_USER = "reality"; # NOTE: Set this as your user in `./devenv.local.nix`
