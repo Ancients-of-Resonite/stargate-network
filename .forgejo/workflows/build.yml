@@ -1,0 +1,10 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build-dash:
+    runs-on: docker
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sgn-dash . -f ./Dockerfile.dash
