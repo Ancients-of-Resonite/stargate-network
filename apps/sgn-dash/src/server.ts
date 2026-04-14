@@ -57,6 +57,7 @@ nextApp.prepare().then(async () => {
 
   server.listen(3000);
   console.log("Server listening on port 3000");
+
   await pgClient.subscribe("*:stargates", (row, { command, relation }) => {
     clients.forEach(async ({ socket, key }) => {
       const session = await auth.api.getSession({
@@ -67,15 +68,23 @@ nextApp.prepare().then(async () => {
 
       const isAdmin = session?.user.tags.includes("admin");
 
-      if (command !== "delete" && !isAdmin && !row!.public_gate) return;
-
-      socket.send(
-        JSON.stringify({
-          type: command,
-          table: relation.table,
-          row,
-        }),
-      );
+      if (isAdmin) {
+        socket.send(
+          JSON.stringify({
+            type: command,
+            table: relation.table,
+            row,
+          }),
+        );
+      } else if (command === "delete" || row!.public_gate) {
+        socket.send(
+          JSON.stringify({
+            type: command,
+            table: relation.table,
+            row,
+          }),
+        );
+      }
     });
   });
 });
