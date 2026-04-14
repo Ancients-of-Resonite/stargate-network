@@ -7,7 +7,6 @@
 }:
 
 {
-  process.manager.implementation = "process-compose";
   env = {
     DB_HOST = "127.0.0.1";
     # DB_USER = "reality"; # NOTE: Set this as your user in `./devenv.local.nix`
@@ -35,9 +34,9 @@
     "db:migrate" = {
       exec = # bash
         ''
-          exec bun --bun install
-          exec bun --bun db:generate
-          exec bun --bun db:migrate
+          bun --bun install
+          bun --bun db:generate
+          bun --bun db:migrate
         '';
       cwd = "./packages/database";
       after = [ "devenv:processes:postgres@ready" ];
@@ -52,6 +51,9 @@
     enable = true;
     listen_addresses = "*";
     port = config.env.DB_PORT;
+    settings = {
+      wal_level = "logical";
+    };
     initialDatabases = [
       {
         name = config.env.DB_DATABASE;

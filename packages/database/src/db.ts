@@ -1,19 +1,21 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 import * as authSchema from "./auth-schema";
-import pg from "pg";
 
-export { eq } from "drizzle-orm"
+import postgres from "postgres";
 
-const { Pool } = pg;
+export { eq } from "drizzle-orm";
 
-export const db = drizzle({
-  client: new Pool({
-    connectionString: `postgresql://${Bun.env.DB_USER}:${Bun.env.DB_PASS}@${Bun.env.DB_HOST}:${Bun.env.DB_PORT ?? 5432}/${Bun.env.DB_DATABASE}`,
-  }),
+export const pgClient = postgres(
+  `postgresql://${Bun.env.DB_USER}:${Bun.env.DB_PASS}@${Bun.env.DB_HOST}:${Bun.env.DB_PORT ?? 5432}/${Bun.env.DB_DATABASE}`,
+  {
+    publications: "alltables",
+  },
+);
+
+export const db = drizzle(pgClient, {
   schema: {
     ...schema,
-    ...authSchema
+    ...authSchema,
   },
 });
-

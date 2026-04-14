@@ -43,7 +43,7 @@ services:
       - sgn-data:/var/lib/postgresql/data # Persistent storage for the database
     ports:
       - "${DB_PORT:-5432}:${DB_PORT:-5432}"
-    command: -p ${DB_PORT:-5432}
+    command: -p ${DB_PORT:-5432} -c "wal_level=logical"
     healthcheck:
       test:
         [

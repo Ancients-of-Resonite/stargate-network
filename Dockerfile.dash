@@ -2,14 +2,16 @@ FROM oven/bun
 
 WORKDIR /app-dash
 
+ENV NODE_ENV=production
+
 COPY . .
 
 RUN bun install
 
 WORKDIR apps/sgn-dash
 
-RUN bun run build
+RUN bun --bun run build
 
 EXPOSE 3000
 
-CMD ["bun", "run", "start"]
+CMD ["bun", "--bun", "run", "./src/server.ts"]
