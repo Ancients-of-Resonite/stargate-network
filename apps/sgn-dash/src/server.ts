@@ -4,10 +4,17 @@ import next from "next";
 import { WebSocket, WebSocketServer } from "ws";
 import { Socket } from "net";
 import { pgClient } from "database/src/db";
+import { auth } from "./lib/auth";
+import { URLSearchParams } from "url";
 
 const nextApp = next({ dev: Bun.env.NODE_ENV !== "production" });
 const handle = nextApp.getRequestHandler();
-const clients: Set<WebSocket> = new Set();
+
+type Client = {
+  key: string | null;
+  socket: WebSocket;
+};
+const clients: Set<Client> = new Set();
 
 nextApp.prepare().then(async () => {
   const server: Server = createServer(
@@ -18,13 +25,19 @@ nextApp.prepare().then(async () => {
 
   const wss = new WebSocketServer({ noServer: true });
 
-  wss.on("connection", (ws: WebSocket) => {
-    clients.add(ws);
-    console.log("New client connected to realtime server");
+  wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+    const search = new URLSearchParams(req.url);
+    const key =
+      (req.headers["x-api-key"] as string | null) ??
+      search.get("/api/ws?apikey");
+    const cl: Client = {
+      key: key,
+      socket: ws,
+    };
+    clients.add(cl);
 
     ws.on("close", () => {
-      clients.delete(ws);
-      console.log("Client disconnected");
+      clients.delete(cl);
     });
   });
 
@@ -45,6 +58,24 @@ nextApp.prepare().then(async () => {
   server.listen(3000);
   console.log("Server listening on port 3000");
   await pgClient.subscribe("*:stargates", (row, { command, relation }) => {
-    console.log(row);
+    clients.forEach(async ({ socket, key }) => {
+      const session = await auth.api.getSession({
+        headers: new Headers({
+          "x-api-key": key ?? "",
+        }),
+      });
+
+      const isAdmin = session?.user.tags.includes("admin");
+
+      if (command !== "delete" && !isAdmin && !row!.public_gate) return;
+
+      socket.send(
+        JSON.stringify({
+          type: command,
+          table: relation.table,
+          row,
+        }),
+      );
+    });
   });
 });
