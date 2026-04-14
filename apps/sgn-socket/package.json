@@ -19,7 +19,7 @@
     "@std/fmt": "npm:@jsr/std__fmt@^1.0.8",
     "croner": "^10.0.1",
     "database": "workspace:*",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "^0.45.0",
     "pg": "^8.16.3",
     "ws": "^8.18.3"
   }
