@@ -3,7 +3,7 @@ on:
 
 jobs:
   build-server:
-    runs-on: debian
+    runs-on: docker
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
