@@ -21,6 +21,7 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v4
         with:
+          registry: git.uninetwork.net
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_KEY }}
       - name: Setup Docker Buildx
@@ -29,5 +30,5 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: ancients-of-resonite/sgn-server:latest
+          tags: git.uninetwork.net/ancients-of-resonite/sgn-server:latest
           file: Dockerfile.server
