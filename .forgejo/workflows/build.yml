@@ -23,7 +23,7 @@ jobs:
           tags: ancients-of-resonite/sgn-server:latest
           file: Dockerfile.server
   build-dash:
-    runs-on: docker
+    runs-on: ubuntu-latest
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
