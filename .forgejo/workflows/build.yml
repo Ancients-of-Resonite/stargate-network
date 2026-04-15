@@ -2,9 +2,39 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-server:
+    runs-on: docker
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v6
+      - name: Docker Login
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_KEY }}
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action
+      - name: Build and Push
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ancients-of-resonite/sgn-server:latest
+          file: Dockerfile.server
   build-dash:
     runs-on: docker
-
     steps:
-      - uses: actions/checkout@v4
-      - run: docker build -t sgn-dash . -f ./Dockerfile.dash
+      - name: Git Checkout
+        uses: actions/checkout@v6
+      - name: Docker Login
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_KEY }}
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action
+      - name: Build and Push
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ancients-of-resonite/sgn-dash:latest
+          file: Dockerfile.dash
