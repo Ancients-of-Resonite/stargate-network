@@ -1,3 +1,5 @@
+name: Build Dash & Server
+
 on:
   workflow_dispatch:
 
