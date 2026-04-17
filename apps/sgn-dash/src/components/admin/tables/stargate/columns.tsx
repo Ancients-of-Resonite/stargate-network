@@ -1,5 +1,6 @@
 "use client";
 
+import GateEditDialog from "@/app/admin/stargates/edit-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,20 +47,7 @@ export const columns: ColumnDef<typeof stargate.$inferSelect>[] = [
     cell: ({ row }) => {
       const gate = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <a href={`/admin/stargates/edit/${gate.id}`}>Edit Gate</a>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <GateEditDialog gate={gate} />;
     },
   },
 ];
