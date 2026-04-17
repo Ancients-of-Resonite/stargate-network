@@ -4,6 +4,8 @@ RUN apt-get update
 
 RUN apt-get install curl -y
 
+LABEL org.opencontainers.image.source=https://git.uninetwork.net/Ancients-of-Resonite/stargate-network
+
 WORKDIR /app
 
 COPY . .
