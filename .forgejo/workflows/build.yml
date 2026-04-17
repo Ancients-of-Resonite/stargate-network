@@ -3,13 +3,15 @@ on:
 
 jobs:
   build-server:
-    runs-on: docker
+    runs-on: ubuntu-server
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
       - name: Install Necessary Tools
         run: |
           apt update
+          echo "Installing Sudo ------"
+          apt -y install sudo
           echo "Installing Iptables ------"
           apt -y install iptables
           echo "Installing fuse-overlayfs ------"
