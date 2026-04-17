@@ -23,3 +23,5 @@ jobs:
           push: true
           tags: git.uninetwork.net/ancients-of-resonite/sgn-server:latest
           file: Dockerfile.server
+          labels: |
+            org.opencontainers.image.source=https://git.uninetwork.net/Ancients-of-Resonite/stargate-network
