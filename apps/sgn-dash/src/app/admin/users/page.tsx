@@ -1,6 +1,12 @@
 import { DataTable } from "@/components/admin/tables/data-table";
 import { columns } from "@/components/admin/tables/users/columns";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Kbd } from "@/components/ui/kbd";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { user } from "database/src/auth-schema";
@@ -24,7 +30,7 @@ export default async function UsersAdminPage() {
           <CardDescription>Shows every created user</CardDescription>
         </CardHeader>
         <CardContent className="mt-4">
-          <DataTable columns={columns} data={users.slice(0, 5)} />
+          <DataTable columns={columns} data={users} />
         </CardContent>
       </Card>
     </main>
