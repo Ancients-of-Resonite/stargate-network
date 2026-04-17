@@ -118,7 +118,8 @@ export default async function requestAddress({
         message: "Gate created successfully",
       },
     });
-    socket.send('{code:200,message:"Address accepted"}');
+    socket.send("200");
+    socket.send('{code:200,message:"Address accepted"}'); // WARN: Deprecated response. Make sure your gate handles a plain 200 response instead
   } else if (eg.session_url == data.session_id) {
     log.info(
       `Gate address exists, but session id is the same on requesting gate. Accepting request for ${data.gate_address}${data.gate_code} (${cyan(remote)})`,
@@ -147,7 +148,8 @@ export default async function requestAddress({
         message: "Gate already exists with this session url, accepted request",
       },
     });
-    socket.send('{code:200,message:"Address accepted"}');
+    socket.send("200");
+    socket.send('{code:200,message:"Address accepted"}'); // WARN: Deprecated response. Make sure your gate handles a plain 200 response instead
     return;
   } else {
     await db.insert(gateLog).values({
