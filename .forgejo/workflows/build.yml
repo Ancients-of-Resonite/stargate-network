@@ -7,17 +7,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-      # - name: Install Necessary Tools
-      #   run: |
-      #     apt update
-      #     echo "Installing Sudo ------"
-      #     apt -y install sudo
-      #     echo "Installing Iptables ------"
-      #     apt -y install iptables
-      #     echo "Installing fuse-overlayfs ------"
-      #     apt -y install fuse-overlayfs
-      #     echo "Installing modprobe ------"
-      #     apt -y install kmod
       - name: Set up Docker
         uses: https://git.uninetwork.net/docker/setup-docker-action@v5
       - name: Docker Login
