@@ -4,6 +4,8 @@ WORKDIR /app-dash
 
 ENV NODE_ENV=production
 
+LABEL org.opencontainers.image.source=https://git.uninetwork.net/ancients-of-resonite/stargate-network
+
 COPY . .
 
 RUN bun install
