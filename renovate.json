@@ -8,7 +8,23 @@
       "enabled": false,
       "matchPackageNames": [
         "*"
-      ]
+      ],
+    {
+      "matchSourceUrls": [
+        "https://github.com/**"
+      ],
+      "prBodyColumns": [
+        "Package",
+        "Type",
+        "Update",
+        "Change",
+        "Pending",
+        "OpenSSF"
+      ],
+      "prBodyDefinitions": {
+        "OpenSSF": "[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/{{sourceRepo}}/badge)](https://securityscorecards.dev/viewer/?uri=github.com/{{sourceRepo}})"
+      }
+    }
     }
   ],
   "vulnerabilityAlerts": {
