@@ -13,7 +13,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.28.2",
   "dependencies": {
     "@types/node": "^24.10.9",
     "dotenv": "^17.2.3",
