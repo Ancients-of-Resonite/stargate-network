@@ -16,6 +16,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { Separator } from "../ui/separator";
 
 const formSchema = z.object({
   name: z.string(),
@@ -130,6 +131,11 @@ export default function RegisterForm() {
           <Button className="w-full" type="submit" form="register-form">
             Register with email
           </Button>
+          <div className="flex items-center gap-1 w-full">
+            <Separator className="flex-1" />
+            <span className="flex-0 text-foreground/50 italic">or</span>
+            <Separator className="flex-1" />
+          </div>
           <Button
             className="w-full"
             onClick={discordAuth}

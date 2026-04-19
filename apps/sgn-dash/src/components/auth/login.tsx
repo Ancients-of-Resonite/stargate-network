@@ -16,6 +16,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { Separator } from "../ui/separator";
 
 const formSchema = z.object({
   email: z.email(),
@@ -107,13 +108,18 @@ export default function LoginForm() {
           <Button className="w-full" type="submit" form="login-form">
             Login with email
           </Button>
+          <div className="flex items-center gap-1 w-full">
+            <Separator className="flex-1" />
+            <span className="flex-0 text-foreground/50 italic">or</span>
+            <Separator className="flex-1" />
+          </div>
           <Button
             className="w-full"
             onClick={discordAuth}
             type="button"
             variant="secondary"
           >
-            Login with Discord
+            Continue with Discord
           </Button>
         </Field>
       </CardFooter>
