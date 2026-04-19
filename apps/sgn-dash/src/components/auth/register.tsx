@@ -18,33 +18,37 @@ import { toast } from "sonner";
 import { redirect } from "next/navigation";
 
 const formSchema = z.object({
+  name: z.string(),
   email: z.email(),
   password: z.string(),
 });
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const auth = await authClient.signIn.email({
+    const auth = await authClient.signUp.email({
+      name: data.name,
       email: data.email,
       password: data.password,
     });
 
     if (auth.error) {
-      toast.error(`Something went wrong [${auth.error.status}]`, {
-        description: auth.error.message,
+      toast.error(auth.error.message);
+    } else {
+      await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
       });
-      return;
+      redirect("/");
     }
-
-    redirect("/");
   }
 
   async function discordAuth(event: React.MouseEvent<HTMLButtonElement>) {
@@ -55,20 +59,39 @@ export default function LoginForm() {
   return (
     <Card className="w-[400px]">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Register</CardTitle>
       </CardHeader>
       <CardContent>
-        <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
+            <Controller
+              name="name"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="register-form-name">Username</FieldLabel>
+                  <Input
+                    {...field}
+                    id="register-form-name"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="you"
+                    type="text"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
             <Controller
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="login-form-email">Email</FieldLabel>
+                  <FieldLabel htmlFor="register-form-email">Email</FieldLabel>
                   <Input
                     {...field}
-                    id="login-form-email"
+                    id="register-form-email"
                     aria-invalid={fieldState.invalid}
                     placeholder="you@email.com"
                     type="email"
@@ -84,12 +107,12 @@ export default function LoginForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="login-form-password">
+                  <FieldLabel htmlFor="register-form-password">
                     Password
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="login-form-password"
+                    id="register-form-password"
                     aria-invalid={fieldState.invalid}
                     type="password"
                   />
@@ -104,8 +127,8 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="vertical">
-          <Button className="w-full" type="submit" form="login-form">
-            Login with email
+          <Button className="w-full" type="submit" form="register-form">
+            Register with email
           </Button>
           <Button
             className="w-full"
@@ -113,7 +136,7 @@ export default function LoginForm() {
             type="button"
             variant="secondary"
           >
-            Login with Discord
+            Continue with Discord
           </Button>
         </Field>
       </CardFooter>

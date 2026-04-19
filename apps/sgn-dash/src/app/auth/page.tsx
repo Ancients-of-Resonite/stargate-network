@@ -1,5 +1,5 @@
 import LoginForm from "@/components/auth/login";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import RegisterForm from "@/components/auth/register";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function Auth() {
@@ -14,11 +14,7 @@ export default async function Auth() {
           <LoginForm />
         </TabsContent>
         <TabsContent value="register">
-          <Card>
-            <CardHeader>
-              <CardTitle>Login</CardTitle>
-            </CardHeader>
-          </Card>
+          <RegisterForm />
         </TabsContent>
       </Tabs>
     </div>
