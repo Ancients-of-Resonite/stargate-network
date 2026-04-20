@@ -1,6 +1,12 @@
 name: Build Dash & Server
 
 on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'apps/**'
+      - 'packages/**'
   workflow_dispatch:
 
 jobs:
