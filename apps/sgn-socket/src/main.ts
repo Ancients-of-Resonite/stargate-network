@@ -141,7 +141,11 @@ wss.on("connection", (socket, req) => {
         break;
       case MessageType.UpdateIris:
         let _s = sessions.getSession(remote)
+        if (!_s) return
         gateEvents.emit(`irisUpdate:${_s?.gate_address}`, data.iris_state)
+        db.update(stargate).set({
+          iris_state: data.iris_state
+        }).where(eq(stargate.gate_address, _s.gate_address))
         break;
       case MessageType.KeepAlive:
         sessions.sessionKeepAlive(remote)
