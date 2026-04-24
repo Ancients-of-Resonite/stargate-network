@@ -30,6 +30,7 @@ export const stargate = pgTable(
     gate_address: text().notNull(),
     gate_code: text().notNull(),
     owner_name: text().notNull(),
+    user_id: text(),
     session_url: text().notNull(),
     session_name: text().notNull(),
     active_users: integer().notNull(),
