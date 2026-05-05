@@ -18,7 +18,7 @@ export default async function requestAddress({
   const banned = await db
     .select()
     .from(bannedIds)
-    .where(eq(bannedIds.user_id, data.host_id));
+    .where(eq(bannedIds.user_id, data.user_id));
 
   if (banned.length !== 0) {
     log.warn(
