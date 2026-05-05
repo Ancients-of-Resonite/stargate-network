@@ -20,7 +20,7 @@ jobs:
         with:
           registry: git.uninetwork.net
           username: ${{ secrets.DOCKER_USER }}
-          password: ${{ forgejo.token }}
+          password: ${{ secrets.DOCKER_KEY }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
       - name: Setup Docker Buildx
@@ -43,7 +43,7 @@ jobs:
         with:
           registry: git.uninetwork.net
           username: ${{ secrets.DOCKER_USER }}
-          password: ${{ forgejo.token }}
+          password: ${{ secrets.DOCKER_KEY }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
       - name: Setup Docker Buildx
