@@ -124,6 +124,24 @@ export default async function requestAddress({
     log.info(
       `Gate address exists, but session id is the same on requesting gate. Accepting request for ${data.gate_address}${data.gate_code} (${cyan(remote)})`,
     );
+    await db
+      .update(stargate)
+      .set({
+        gate_address: data.gate_address,
+        gate_code: data.gate_code,
+        max_users: data.max_users,
+        gate_status: "IDLE",
+        iris_state: false,
+        owner_name: data.host_id,
+        session_name: data.gate_name,
+        session_url: data.session_id,
+        active_users: data.current_users,
+        is_headless: data.is_headless,
+        public_gate: data.public,
+        gate_color: data.gate_color,
+        last_keep_alive: new Date(),
+      })
+      .where(eq(stargate.id, eg.id));
     sessions.pushSession({
       id: eg.id,
       gate_address: data.gate_address,
