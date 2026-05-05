@@ -1,0 +1,1 @@
+ALTER TABLE "stargates" ADD COLUMN "user_id" text;
