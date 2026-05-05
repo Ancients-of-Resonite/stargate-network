@@ -64,6 +64,7 @@ export default async function requestAddress({
         is_headless: data.is_headless,
         public_gate: data.public,
         gate_color: data.gate_color,
+        user_id: data.user_id,
         last_keep_alive: new Date(),
       });
     } catch (err) {
@@ -133,6 +134,7 @@ export default async function requestAddress({
         gate_status: "IDLE",
         iris_state: false,
         owner_name: data.host_id,
+        user_id: data.user_id,
         session_name: data.gate_name,
         session_url: data.session_id,
         active_users: data.current_users,

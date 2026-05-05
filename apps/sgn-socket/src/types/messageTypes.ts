@@ -9,6 +9,7 @@ export interface RequestAddress {
   gate_address: string;
   gate_code: string;
   host_id: string;
+  user_id: string;
   is_headless: boolean;
   session_id: string;
   current_users: number;
